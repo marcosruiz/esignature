@@ -1,6 +1,5 @@
 package main;
 
-import main.Main;
 import com.itextpdf.text.pdf.PdfStamper;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -47,42 +46,54 @@ public class MainTest {
     }
 
     /**
-     * Test of createFields method, of class Main.
+     * Test of sign method, of class Main.
      */
     @Test
-    public void testCreateFields() throws Exception {
-        System.out.println("createFields");
-        int numberOfSignatures = 0;
-        String source = "";
+    public void testSign() throws Exception {
+        System.out.println("sign");
+        String keystore = "";
+        int level = 0;
+        String src = "";
+        String name = "";
         String dest = "";
-        String positionOfSignatures = "";
-        Main.createFields(numberOfSignatures, source, dest, positionOfSignatures);
+        String password = "";
+        Main.sign(keystore, level, src, name, dest, password);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of signFields method, of class Main.
-     */
-    @Test
-    public void testSignFields() {
-        System.out.println("signFields");
-        Main.signFields();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
     /**
-     * Test of addFields method, of class Main.
+     * Test of addFieldsWithImage method, of class Main.
      */
     @Test
-    public void testAddFields() throws Exception {
-        System.out.println("addFields");
+    public void testAddFieldsWithImage() throws Exception {
+        System.out.println("addFieldsWithImage");
         String src = "";
         String dest = "";
         int numberOfSignatures = 0;
         String positionOfSignatures = "";
-        Main.addFields(src, dest, numberOfSignatures, positionOfSignatures);
+        String routeOfMyImage = "";
+        Main.addFieldsWithImage(src, dest, numberOfSignatures, positionOfSignatures, routeOfMyImage);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of addFieldWithImage method, of class Main.
+     */
+    @Test
+    public void testAddFieldWithImage() throws Exception {
+        System.out.println("addFieldWithImage");
+        PdfStamper stamper = null;
+        String name = "";
+        int x1 = 0;
+        int y1 = 0;
+        int x2 = 0;
+        int y2 = 0;
+        String pos = "";
+        String routeOfMyImage = "";
+        Main.addFieldWithImage(stamper, name, x1, y1, x2, y2, pos, routeOfMyImage);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -120,24 +131,6 @@ public class MainTest {
     }
 
     /**
-     * Test of addFieldWithImage method, of class Main.
-     */
-    @Test
-    public void testAddFieldWithImage() throws Exception {
-        System.out.println("addFieldWithImage");
-        PdfStamper stamper = null;
-        String name = "";
-        int x1 = 0;
-        int y1 = 0;
-        int x2 = 0;
-        int y2 = 0;
-        String routeOfMyImage = "";
-        Main.addFieldWithImage(stamper, name, x1, y1, x2, y2, routeOfMyImage);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of putImage method, of class Main.
      */
     @Test
@@ -146,10 +139,9 @@ public class MainTest {
         PdfStamper stamper = null;
         int x1 = 0;
         int y1 = 0;
-        int x2 = 0;
-        int y2 = 0;
         String route = "";
-        Main.putImage(stamper, x1, y1, x2, y2, route);
+        int rotation = 0;
+        Main.putImage(stamper, x1, y1, route, rotation);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
