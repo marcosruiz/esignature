@@ -7,17 +7,6 @@
  */
 package signatures.chapter2;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.security.Security;
-import java.security.cert.Certificate;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Rectangle;
@@ -37,6 +26,15 @@ import com.itextpdf.text.pdf.security.ExternalSignature;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.Security;
+import java.security.cert.Certificate;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class C2_10_SequentialSignatures {
 	public static final String FORM = "results/chapter2/multiple_signatures.pdf";
@@ -118,8 +116,8 @@ public class C2_10_SequentialSignatures {
 		C2_10_SequentialSignatures app = new C2_10_SequentialSignatures();
 		app.createForm();
 
-		app.sign(ALICE, PdfSignatureAppearance.CERTIFIED_FORM_FILLING, FORM, "sig1", String.format(DEST, "alice"));
-        app.sign(BOB, PdfSignatureAppearance.NOT_CERTIFIED, String.format(DEST, "alice"), "sig1", String.format(DEST, "bob"));
+        app.sign(ALICE, PdfSignatureAppearance.NOT_CERTIFIED, FORM, "sig1", String.format(DEST, "alice"));
+        app.sign(BOB, PdfSignatureAppearance.NOT_CERTIFIED, String.format(DEST, "alice"), "sig2", String.format(DEST, "bob"));
 		app.sign(CAROL, PdfSignatureAppearance.NOT_CERTIFIED, String.format(DEST, "bob"), "sig3", String.format(DEST, "carol"));
 
 		app.sign(ALICE, PdfSignatureAppearance.NOT_CERTIFIED, FORM, "sig1", String.format(DEST, "alice2"));
