@@ -23,11 +23,11 @@ This program use the following libraries:
 ### Creating blank signatures (-create)
 
 | Option | Opt/Obl | Description | +Info |
-|:--:|----|----|----|----|
+|----|----|----|----|----|
 | -src | Obligatory | route of source pdf file |  |
 | -dest | Obligatory | route of generated pdf file |  |
 | -qos | Optional (default=1) | quantity of empty/blank signatures to add | If we use more than 3 (on top/bot margins) or 4 (on left/right margins) our signatures will not be visible |
-| -margin | Optional (default=top) | margin where our empty signatures will be placed (we supose we work with DinA4 pdfs) | [top|left|right|bot] |
+| -margin | Optional (default=top) | margin where our empty signatures will be placed (we supose we work with DinA4 pdfs) | top left right or bot |
 | -img | Optional | route of an image to add to signatures |  |
 
 Example:
@@ -39,11 +39,11 @@ java -jar esignature-cl.jar -create -src src/main/resources/hello.pdf -dest src/
 ### Signing blank signatures (-sign)
 
 | Option | Opt/Obl | Description | +Info |
-|:--:|----|----|----|----|
+|----|----|----|----|----|
 | -src | Obligatory | route of source pdf file |  |
 | -dest | Obligatory |   route of generated pdf file |  |
-| -ks | Obligatory | keystore |  | It could be a .jks or a .p12 file |
-| -pass | Obligatory | password |  | password of our keystore to use it |
+| -ks | Obligatory | keystore | It could be a .jks or a .p12 file |
+| -pass | Obligatory | password | password of our keystore to use it |
 
 Example:
 
