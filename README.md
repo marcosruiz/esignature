@@ -9,7 +9,7 @@ Command line program to sign pdfs on the fly
 This program use the following libaries:
 
 - itext5
-- bc
+- bc (bouncy castle)
 - slf4j
 
 ### Test libraries
