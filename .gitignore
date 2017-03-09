@@ -7,3 +7,16 @@
 *.war
 *.ear
 build/
+
+# Netbeans folder
+nbproyeject/
+
+# Jacocoverage folder
+.jacocoverage/
+
+# Do not save keys or certificates
+*.jks
+*.p12
+*.key
+*.crt
+*ks
