@@ -365,6 +365,4 @@ public class Application {
         PdfContentByte over = stamper.getOverContent(1);
         over.addImage(image);
     }
-
-
 }
