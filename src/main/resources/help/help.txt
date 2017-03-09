@@ -1,0 +1,44 @@
+NAME
+    esignature-cl
+        Command line program to sign pdfs on the fly
+
+SYNOPSIS
+    java -jar esignature-cl.jar <OPERATION> [OPTIONS...]
+
+OPERATION
+    -create
+        create empty signatures
+    -sign
+        sign empty signatures
+
+OPTIONS
+    to OPERATION -create
+        -src
+            route of source pdf file
+        -dest
+            route of generated pdf file
+        -qos
+            quantity of empty signatures to add [1|2|3|4]
+        -margin
+            margin where our empty signatures be placed [top|bot|left|right]
+        -img
+            route of an image to add to our empty signatures
+    to OPERATION -sign
+        -src
+            route of source pdf file
+        -dest
+            route of generated pdf file
+        -ks
+            keystore (.jks or .p12)
+        -pass
+            password of our keystore
+
+EXAMPLES
+    java -jar esignature-cl.jar -create ./hello_src.pdf -dest ./hello_dest.pdf -qos 3 -margin top -img ./icon.png
+    java -jar esignature-cl.java -sign -src ./hello_src.pdf -dest ./hello_dest.pdf -pass password -ks ./abc.p12
+
+AUTHOR
+    Marcos Ruiz García [sobrenombre@gmail.com]
+
+ABOUT
+    More info: https://github.com/marcosruiz/esignature

@@ -1,20 +1,18 @@
 package main;
 
-import com.itextpdf.text.pdf.PdfStamper;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
- * @author ITERNOVA [http://www.iternova.net]
+ * @author Marcos Ruiz Garcia [sobrenombre@gmail.com]
  */
-public class MainTest {
+public class ApplicationSignTest {
 
-    public MainTest() {
+    public ApplicationSignTest() {
     }
 
     @BeforeClass
@@ -34,116 +32,58 @@ public class MainTest {
     }
 
     /**
-     * Test of main method, of class Main.
+     * Test of main method, of class Application.
      */
     @Test
-    public void testMain() throws Exception {
-        System.out.println("main");
-        String[] args = null;
-        Main.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testMainSignSeveralEmptyFields() throws Exception {
+        signSeveralEmptyFields("top");
+        signSeveralEmptyFields("bot");
+        signSeveralEmptyFields("right");
+        signSeveralEmptyFields("left");
     }
 
-    /**
-     * Test of sign method, of class Main.
-     */
-    @Test
-    public void testSign() throws Exception {
-        System.out.println("sign");
-        String keystore = "";
-        int level = 0;
-        String src = "";
-        String name = "";
-        String dest = "";
-        String password = "";
-        Main.sign(keystore, level, src, name, dest, password);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void signSeveralEmptyFields(String margin) throws Exception {
+        String[] args = new String[9];
+        args[0] = "-sign";
+        args[1] = "-src";
+        args[2] = "results/test/create/hello_empty_fields_" + margin + "_4.pdf";
+        args[3] = "-dest";
+        args[5] = "-pass";
+        args[6] = "password";
+        args[7] = "-ks";
+        args[8] = "src/main/resources/abc.p12";
+
+        for (int i = 1; i <= 4; i++) {
+            args[4] = "results/test/sign/hello_" + margin + "_" + i + "_signed_of_4.pdf";
+            Application.main(args);
+            args[2] = args[4];
+        }
     }
 
-
-    /**
-     * Test of addFieldsWithImage method, of class Main.
-     */
     @Test
-    public void testAddFieldsWithImage() throws Exception {
-        System.out.println("addFieldsWithImage");
-        String src = "";
-        String dest = "";
-        int numberOfSignatures = 0;
-        String positionOfSignatures = "";
-        String routeOfMyImage = "";
-        Main.addFieldsWithImage(src, dest, numberOfSignatures, positionOfSignatures, routeOfMyImage);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testMainSignSeveralEmptyFieldsWithImg() throws Exception {
+        signSeveralEmptyFieldsWithImg("top");
+        signSeveralEmptyFieldsWithImg("bot");
+        signSeveralEmptyFieldsWithImg("right");
+        signSeveralEmptyFieldsWithImg("left");
     }
 
-    /**
-     * Test of addFieldWithImage method, of class Main.
-     */
-    @Test
-    public void testAddFieldWithImage() throws Exception {
-        System.out.println("addFieldWithImage");
-        PdfStamper stamper = null;
-        String name = "";
-        int x1 = 0;
-        int y1 = 0;
-        int x2 = 0;
-        int y2 = 0;
-        String pos = "";
-        String routeOfMyImage = "";
-        Main.addFieldWithImage(stamper, name, x1, y1, x2, y2, pos, routeOfMyImage);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    public void signSeveralEmptyFieldsWithImg(String margin) throws Exception {
+        String[] args = new String[9];
+        args[0] = "-sign";
+        args[1] = "-src";
+        args[2] = "results/test/create/hello_empty_fields_with_img_" + margin + "_4.pdf";
+        args[3] = "-dest";
+        args[5] = "-pass";
+        args[6] = "password";
+        args[7] = "-ks";
+        args[8] = "src/main/resources/abc.p12";
 
-    /**
-     * Test of getCoordinates method, of class Main.
-     */
-    @Test
-    public void testGetCoordinates() {
-        System.out.println("getCoordinates");
-        String position = "";
-        int i = 0;
-        int[] expResult = null;
-        int[] result = Main.getCoordinates(position, i);
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of addField method, of class Main.
-     */
-    @Test
-    public void testAddField() {
-        System.out.println("addField");
-        PdfStamper stamper = null;
-        String name = "";
-        int x1 = 0;
-        int y1 = 0;
-        int x2 = 0;
-        int y2 = 0;
-        Main.addField(stamper, name, x1, y1, x2, y2);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of putImage method, of class Main.
-     */
-    @Test
-    public void testPutImage() throws Exception {
-        System.out.println("putImage");
-        PdfStamper stamper = null;
-        int x1 = 0;
-        int y1 = 0;
-        String route = "";
-        int rotation = 0;
-        Main.putImage(stamper, x1, y1, route, rotation);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        for (int i = 1; i <= 4; i++) {
+            args[4] = "results/test/sign/hello_" + margin + "_" + i + "_signed_of_4_with_img.pdf";
+            Application.main(args);
+            args[2] = args[4];
+        }
     }
 
 }
