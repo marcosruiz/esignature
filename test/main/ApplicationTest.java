@@ -1,20 +1,23 @@
 package main;
 
 import com.itextpdf.text.pdf.PdfStamper;
+import exception.MarginNotFoundException;
+import exception.WrittingOutOfDinA4Exception;
+import java.io.FileNotFoundException;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
- * @author ITERNOVA [http://www.iternova.net]
+ * @author Marcos Ruiz Garcia [sobrenombre@gmail.com]
  */
-public class MainTest {
+public class ApplicationTest {
 
-    public MainTest() {
+    public ApplicationTest() {
     }
 
     @BeforeClass
@@ -34,116 +37,96 @@ public class MainTest {
     }
 
     /**
-     * Test of main method, of class Main.
+     * Test of signEmptyField method, of class Application.
      */
-    @Test
-    public void testMain() throws Exception {
-        System.out.println("main");
-        String[] args = null;
-        Main.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of sign method, of class Main.
-     */
-    @Test
-    public void testSign() throws Exception {
-        System.out.println("sign");
+    @Test(expected = FileNotFoundException.class)
+    public void testSignEmptyField() throws Exception {
+        System.out.printf(".");
         String keystore = "";
         int level = 0;
         String src = "";
-        String name = "";
         String dest = "";
-        String password = "";
-        Main.sign(keystore, level, src, name, dest, password);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String pass = "";
+        Application.signEmptyField(keystore, level, src, dest, pass);
     }
 
 
     /**
-     * Test of addFieldsWithImage method, of class Main.
+     * Test of createEmptyFields method, of class Application.
      */
-    @Test
-    public void testAddFieldsWithImage() throws Exception {
-        System.out.println("addFieldsWithImage");
+    @Test(expected = WrittingOutOfDinA4Exception.class)
+    public void testCreateEmptyFields() throws Exception {
+        System.out.printf(".");
         String src = "";
         String dest = "";
-        int numberOfSignatures = 0;
-        String positionOfSignatures = "";
-        String routeOfMyImage = "";
-        Main.addFieldsWithImage(src, dest, numberOfSignatures, positionOfSignatures, routeOfMyImage);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        int qos = 0;
+        String margin = "";
+        String img = "";
+        Application.createEmptyFields(src, dest, qos, margin, img);
     }
 
     /**
-     * Test of addFieldWithImage method, of class Main.
+     * Test of createEmptyFieldWithImage method, of class Application.
      */
-    @Test
+    @Test(expected = MarginNotFoundException.class)
     public void testAddFieldWithImage() throws Exception {
-        System.out.println("addFieldWithImage");
+        System.out.printf(".");
         PdfStamper stamper = null;
         String name = "";
         int x1 = 0;
         int y1 = 0;
         int x2 = 0;
         int y2 = 0;
-        String pos = "";
-        String routeOfMyImage = "";
-        Main.addFieldWithImage(stamper, name, x1, y1, x2, y2, pos, routeOfMyImage);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String margin = "";
+        String img = "";
+        int shift = 0;
+        Application.createEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
     }
 
     /**
-     * Test of getCoordinates method, of class Main.
+     * Test of getCoordinates method, of class Application.
      */
-    @Test
-    public void testGetCoordinates() {
-        System.out.println("getCoordinates");
-        String position = "";
+    @Test(expected = WrittingOutOfDinA4Exception.class)
+    public void testGetCoordinates() throws Exception {
+        System.out.printf(".");
+        String margin = "";
         int i = 0;
         int[] expResult = null;
-        int[] result = Main.getCoordinates(position, i);
+        int[] result = Application.getCoordinates(margin, i);
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
-     * Test of addField method, of class Main.
+     * Test of createEmptyField method, of class Application.
      */
-    @Test
-    public void testAddField() {
-        System.out.println("addField");
+    @Test(expected = NullPointerException.class)
+    public void testCreateEmptyField() {
+        System.out.printf(".");
         PdfStamper stamper = null;
         String name = "";
         int x1 = 0;
         int y1 = 0;
         int x2 = 0;
         int y2 = 0;
-        Main.addField(stamper, name, x1, y1, x2, y2);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Application.createEmptyField(stamper, name, x1, y1, x2, y2);
+
     }
 
     /**
-     * Test of putImage method, of class Main.
+     * Test of putImage method, of class Application.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testPutImage() throws Exception {
-        System.out.println("putImage");
+        System.out.printf(".");
         PdfStamper stamper = null;
         int x1 = 0;
         int y1 = 0;
         String route = "";
         int rotation = 0;
-        Main.putImage(stamper, x1, y1, route, rotation);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        int sideSquare = 0;
+        int sizeMargin = 0;
+        Application.putImage(stamper, x1, y1, route, rotation, sideSquare, sizeMargin);
     }
+
 
 }
