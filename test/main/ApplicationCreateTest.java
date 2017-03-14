@@ -40,7 +40,7 @@ public class ApplicationCreateTest {
         String[] args = new String[5];
         args[0] = "-create";
         args[1] = "-src";
-        args[2] = "src/main/resources/hello.pdf";
+        args[2] = "resources/hello.pdf";
         args[3] = "-dest";
         args[4] = "results/test/create/hello_empty_fields_1.pdf";
         Application.main(args);
@@ -59,7 +59,7 @@ public class ApplicationCreateTest {
         String[] args = new String[9];
         args[0] = "-create";
         args[1] = "-src";
-        args[2] = "src/main/resources/hello.pdf";
+        args[2] = "resources/hello.pdf";
         args[3] = "-dest";
         args[5] = "-qos";
         args[7] = "-margin";
@@ -84,13 +84,13 @@ public class ApplicationCreateTest {
         String[] args = new String[11];
         args[0] = "-create";
         args[1] = "-src";
-        args[2] = "src/main/resources/hello.pdf";
+        args[2] = "resources/hello.pdf";
         args[3] = "-dest";
         args[5] = "-qos";
         args[7] = "-margin";
         args[8] = margin;
         args[9] = "-img";
-        args[10] = "src/main/resources/icon6.png";
+        args[10] = "resources/icon6.png";
 
         String path_pre = "results/test/create/hello_empty_fields_with_img_" + margin + "_";
         String path_post = ".pdf";

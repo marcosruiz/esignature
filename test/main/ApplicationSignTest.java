@@ -51,7 +51,7 @@ public class ApplicationSignTest {
         args[5] = "-pass";
         args[6] = "password";
         args[7] = "-ks";
-        args[8] = "src/main/resources/abc.p12";
+        args[8] = "resources/abc.p12";
 
         for (int i = 1; i <= 4; i++) {
             args[4] = "results/test/sign/hello_" + margin + "_" + i + "_signed_of_4.pdf";
@@ -77,7 +77,7 @@ public class ApplicationSignTest {
         args[5] = "-pass";
         args[6] = "password";
         args[7] = "-ks";
-        args[8] = "src/main/resources/abc.p12";
+        args[8] = "resources/abc.p12";
 
         for (int i = 1; i <= 4; i++) {
             args[4] = "results/test/sign/hello_" + margin + "_" + i + "_signed_of_4_with_img.pdf";
