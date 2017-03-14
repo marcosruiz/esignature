@@ -10,7 +10,13 @@ This program use the following libaries:
 
 - itext5
 - bc (bouncy castle)
-- slf4j
+- slf4j (not really)
+
+In fact, you only need the following .jar as project's libraries:
+
+- itextpdf-5.5.10.jar
+- bcprov-ext-jdk15on-156.jar
+- bcpkix-jdk15on-156.jar
 
 ### Test libraries
 
