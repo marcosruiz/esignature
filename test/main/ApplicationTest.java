@@ -113,7 +113,7 @@ public class ApplicationTest {
     }
 
     /**
-     * Test of putImage method, of class Application.
+     * Test of putImageSquare method, of class Application.
      */
     @Test(expected = NullPointerException.class)
     public void testPutImage() throws Exception {
@@ -125,7 +125,7 @@ public class ApplicationTest {
         int rotation = 0;
         int sideSquare = 0;
         int sizeMargin = 0;
-        Application.putImage(stamper, x1, y1, route, rotation, sideSquare, sizeMargin);
+        Application.putImageSquare(stamper, x1, y1, route, rotation, sideSquare, sizeMargin);
     }
 
 

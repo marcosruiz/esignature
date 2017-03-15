@@ -100,4 +100,39 @@ public class ApplicationCreateTest {
             Application.main(args);
         }
     }
+
+    ////////////////
+    // ADD IMAGE //
+    ///////////////
+    @Test
+    public void testAddImage() throws Exception {
+        String[] args = new String[7];
+        args[0] = "-addimage";
+        args[1] = "-src";
+        args[2] = "resources/hello.pdf";
+        args[3] = "-dest";
+        args[4] = "results/test/addimage/hello_image_right_side.pdf";
+        args[5] = "-img";
+        args[6] = "resources/cb.png";
+
+        Application.main(args);
+
+    }
+
+    //////////////////
+    // ADD BARCODE //
+    /////////////////
+    @Test
+    public void testAddBarcode() throws Exception {
+        String[] args = new String[7];
+        args[0] = "-addbarcode";
+        args[1] = "-src";
+        args[2] = "resources/hello.pdf";
+        args[3] = "-dest";
+        args[4] = "results/test/addbarcode/hello_barcode_right_side.pdf";
+        args[5] = "-code";
+        args[6] = "58c905fa477ca304d1123ce3";
+
+        Application.main(args);
+    }
 }

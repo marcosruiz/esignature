@@ -1,16 +1,23 @@
 package main;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.BadPdfFormatException;
+import com.itextpdf.text.pdf.Barcode;
+import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.BarcodeEAN;
 import com.itextpdf.text.pdf.PdfAnnotation;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfFormField;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.security.BouncyCastleDigest;
 import com.itextpdf.text.pdf.security.ExternalDigest;
 import com.itextpdf.text.pdf.security.ExternalSignature;
@@ -19,8 +26,10 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 import exception.MarginNotFoundException;
 import exception.NoEmptySignaturesException;
 import exception.WrittingOutOfDinA4Exception;
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -71,6 +80,8 @@ public class Application {
         //Arguments
         boolean create = false; // create gaps to our pdf
         boolean sign = false; // signEmptyField a gap of our pdf
+        boolean addimage = false;
+        boolean addbarcode = false;
         String margin = "top"; // top, bot, left, right
         int qos = 1; //quantity of signatures: 1, 2, 3 or 4
         String img = null;
@@ -78,6 +89,7 @@ public class Application {
         String src = null;
         String dest = null;
         String pass = null;
+        String code = null;
 
 
         for (int i = 0; i < args.length; i++) {
@@ -104,6 +116,9 @@ public class Application {
                     case "-pass":
                         pass = args[i];
                         break;
+                    case "-code":
+                        code = args[i];
+                        break;
                     default:
                         break;
                 }
@@ -115,6 +130,12 @@ public class Application {
                         break;
                     case "-sign":
                         sign = true;
+                        break;
+                    case "-addimage":
+                        addimage = true;
+                        break;
+                    case "-addbarcode":
+                        addbarcode = true;
                         break;
                     case "-qos":
                         isSecondPair = true;
@@ -137,8 +158,25 @@ public class Application {
                     case "-pass":
                         isSecondPair = true;
                         break;
+                    case "-code":
+                        isSecondPair = true;
+                        break;
                     case "-h":
-                        s = new Scanner(new File("src/main/resources/help/help.txt"));
+                        s = new Scanner(new File("resources/help/help.txt"));
+                        while (s.hasNext()) {
+                            System.out.println(s.nextLine());
+                        }
+                        s.close();
+                        break;
+                    case "-help":
+                        s = new Scanner(new File("resources/help/help.txt"));
+                        while (s.hasNext()) {
+                            System.out.println(s.nextLine());
+                        }
+                        s.close();
+                        break;
+                    case "help":
+                        s = new Scanner(new File("resources/help/help.txt"));
                         while (s.hasNext()) {
                             System.out.println(s.nextLine());
                         }
@@ -157,6 +195,10 @@ public class Application {
             Security.addProvider(provider);
             signEmptyField(ks, PdfSignatureAppearance.NOT_CERTIFIED, src, dest, pass);
             System.out.println("Signature successful");
+        } else if (addbarcode) {
+            addBarcode(src, dest, code);
+        } else if (addimage) {
+            addImage(src, dest, img);
         }
     }
 
@@ -267,9 +309,9 @@ public class Application {
     public static void createEmptyFieldWithImage(PdfStamper stamper, String name, int x1, int y1, int x2, int y2, String margin, String img, int shift) throws BadPdfFormatException, IOException, DocumentException, MarginNotFoundException {
 
         if (margin.equals("top") || margin.equals("bot")) {
-            putImage(stamper, x1 - shift, y1, img, 0, 20, 10);
+            putImageSquare(stamper, x1 - shift, y1, img, 0, 20, 10);
         } else if (margin.equals("left") || margin.equals("right")) {
-            putImage(stamper, x1, y1 - shift, img, 0, 20, 10);
+            putImageSquare(stamper, x1, y1 - shift, img, 0, 20, 10);
         } else {
             throw new MarginNotFoundException();
         }
@@ -354,13 +396,66 @@ public class Application {
      * @throws IOException
      * @throws DocumentException
      */
-    public static void putImage(PdfStamper stamper, int x, int y, String img, int rotation, int sizeSquare, int sizeMargin) throws BadPdfFormatException, IOException, DocumentException {
+    public static void putImageSquare(PdfStamper stamper, int x, int y, String img, int rotation, int sizeSquare, int sizeMargin) throws BadPdfFormatException, IOException, DocumentException {
         if (stamper == null || img == null) {
             throw new java.lang.NullPointerException();
         }
         Image image = Image.getInstance(img);
         image.setAbsolutePosition(x + sizeMargin, y + sizeMargin);
         image.scaleAbsolute(sizeSquare, sizeSquare);
+        image.setRotationDegrees(rotation);
+        PdfContentByte over = stamper.getOverContent(1);
+        over.addImage(image);
+    }
+
+    public static void addBarcode(String src, String dest, String code) throws IOException, DocumentException {
+        PdfReader reader = new PdfReader(src);
+        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+
+        PdfContentByte over = stamper.getOverContent(1);
+
+        Barcode128 barcode = new Barcode128();
+        barcode.setCodeType(Barcode.CODE128);
+        barcode.setCode(code);
+
+        Image image = barcode.createImageWithBarcode(over, BaseColor.BLACK, BaseColor.BLACK);
+
+        Rectangle pagesize = reader.getPageSize(1);
+        float x = pagesize.getRight() - 50;
+        float y = pagesize.getBottom() + 20;
+        PdfTemplate template
+                = barcode.createTemplateWithBarcode(over, BaseColor.BLACK, BaseColor.BLACK);
+        putImage(stamper, image, x, y, 500, 40, 90);
+        //Close
+        stamper.close();
+        reader.close();
+    }
+
+    public static void addImage(String src, String dest, String img) throws IOException, FileNotFoundException, DocumentException {
+        PdfReader reader = new PdfReader(src);
+        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+        Rectangle pagesize = reader.getPageSize(1);
+        float x = pagesize.getRight() - 50;
+        float y = pagesize.getBottom() + 20;
+        putImage(stamper, img, x, y, 500, 40, 90);
+        stamper.close();
+        reader.close();
+
+    }
+
+    public static void putImage(PdfStamper stamper, String img, float posX, float posY, int lenX, int lenY, int rotation) throws BadElementException, IOException, DocumentException {
+        if (stamper == null || img == null) {
+            throw new java.lang.NullPointerException();
+        }
+        Image image = Image.getInstance(img);
+        putImage(stamper, image, posX, posY, lenX, lenY, rotation);
+        //image.scaleAbsolute(lenX, lenY);
+
+    }
+
+    public static void putImage(PdfStamper stamper, Image image, float posX, float posY, int lenX, int lenY, int rotation) throws DocumentException {
+        image.scaleToFit(lenX, lenY);
+        image.setAbsolutePosition(posX, posY);
         image.setRotationDegrees(rotation);
         PdfContentByte over = stamper.getOverContent(1);
         over.addImage(image);
