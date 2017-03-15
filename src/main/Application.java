@@ -9,7 +9,6 @@ import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.BadPdfFormatException;
 import com.itextpdf.text.pdf.Barcode;
 import com.itextpdf.text.pdf.Barcode128;
-import com.itextpdf.text.pdf.BarcodeEAN;
 import com.itextpdf.text.pdf.PdfAnnotation;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfFormField;
@@ -47,7 +46,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-// E.g: java -jar esignature-cl.java -create -src src/main/resources/hello.pdf -dest src/main/resources/hello_test.pdf -qos 3 -margin right -img src/main/resources/icon.png
+// E.g: java -jar esignature-cl.java -addemptysigns -src src/main/resources/hello.pdf -dest src/main/resources/hello_test.pdf -qos 3 -margin right -img src/main/resources/icon.png
 // E.g: java -jar esignature-cl.java -sign -src src/main/resources/hello_test.pdf -dest src/main/resources/hello_test_2.pdf -pass pass -ks src/main/resources/abc.p12
 /**
  *
@@ -55,7 +54,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  */
 public class Application {
     /**
-     * Read the arguments of the program and create empty signatures or signEmptyField empty signatures
+     * Read the arguments of the program and addemptysigns empty signatures or signEmptyField empty signatures
      *
      * @param args
      * @throws java.io.IOException
@@ -78,7 +77,7 @@ public class Application {
         Scanner s;
         boolean isSecondPair = false; // true if is a pair of arguments like "-qos 3"
         //Arguments
-        boolean create = false; // create gaps to our pdf
+        boolean addemptysigns = false; // addemptysigns gaps to our pdf
         boolean sign = false; // signEmptyField a gap of our pdf
         boolean addimage = false;
         boolean addbarcode = false;
@@ -125,8 +124,8 @@ public class Application {
                 isSecondPair = false;
             } else {
                 switch (args[i]) {
-                    case "-create":
-                        create = true;
+                    case "-addemptysigns":
+                        addemptysigns = true;
                         break;
                     case "-sign":
                         sign = true;
@@ -187,7 +186,7 @@ public class Application {
                 }
             }
         }
-        if (create) {
+        if (addemptysigns) {
             createEmptyFields(src, dest, qos, margin, img);
             System.out.println("Empty fields created");
         } else if (sign) {
@@ -375,7 +374,7 @@ public class Application {
         if (stamper == null || name == null) {
             throw new java.lang.NullPointerException();
         }
-        // create a signature form field
+        // addemptysigns a signature form field
         PdfFormField field = PdfFormField.createSignature(stamper.getWriter());
         field.setFieldName(name);
         // set the widget properties

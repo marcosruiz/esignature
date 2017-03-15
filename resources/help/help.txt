@@ -1,22 +1,27 @@
 NAME
     esignature-cl
-        Command line program to sign pdfs on the fly
+        Command line program to sign pdfs on the fly and a little bit more
 
 SYNOPSIS
     java -jar esignature-cl.jar <OPERATION> [OPTIONS...]
 
 OPERATION
-    -create
+    -addemptysigns
         create empty signatures
     -sign
         sign empty signatures
+    -addbarcode
+        add a barcode to the left-bottom corner margin
+    -addimage
+        add a image to the left-bottom corner margin
 
 OPTIONS
-    to OPERATION -create
+    to ALL operations
         -src
-            route of source pdf file
+            route of source pdf file <MANDATORY>
         -dest
-            route of generated pdf file
+            route of generated pdf file <MANDATORY>
+    to OPERATION -addemptysigns
         -qos
             quantity of empty signatures to add [1|2|3|4]
         -margin
@@ -24,18 +29,22 @@ OPTIONS
         -img
             route of an image to add to our empty signatures
     to OPERATION -sign
-        -src
-            route of source pdf file
-        -dest
-            route of generated pdf file
         -ks
-            keystore (.jks or .p12)
+            keystore (.jks or .p12) <MANDATORY>
         -pass
-            password of our keystore
+            password of our keystore <MANDATORY>
+    to OPERATION -addbarcode
+       -code
+            code used to generate the barcode <MANDATORY>
+    to OPERATION -addimage
+        -img
+            route of an image to add
 
 EXAMPLES
-    java -jar esignature-cl.jar -create ./hello_src.pdf -dest ./hello_dest.pdf -qos 3 -margin top -img ./icon.png
+    java -jar esignature-cl.jar -addemptysigns ./hello_src.pdf -dest ./hello_dest.pdf -qos 3 -margin top -img ./icon.png
     java -jar esignature-cl.java -sign -src ./hello_src.pdf -dest ./hello_dest.pdf -pass password -ks ./abc.p12
+    java -jar esignature-cl.java -addbarcode -src ./hello_src.pdf -dest ./hello_dest.pdf -code thisisacode
+    java -jar esignature-cl.java -addimage -src ./hello_src.pdf -dest ./hello_dest.pdf -img ./image.png
 
 AUTHOR
     Marcos Ruiz García [sobrenombre@gmail.com]
