@@ -88,12 +88,11 @@ public class ApplicationTest {
      */
     @Test(expected = WrittingOutOfDinA4Exception.class)
     public void testGetCoordinates() throws Exception {
-        System.out.printf(".");
         String margin = "";
         int i = 0;
-        int[] expResult = null;
-        int[] result = Application.getCoordinates(margin, i);
-        assertArrayEquals(expResult, result);
+        float[] expResult = null;
+        float[] result = Application.getCoordinates(null, margin, i);
+        assertEquals(null, result);
     }
 
     /**

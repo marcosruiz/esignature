@@ -1,5 +1,6 @@
 package main;
 
+import java.io.IOException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -67,7 +68,7 @@ public class ApplicationCreateTest {
 
         String path_pre = "results/test/create/hello_empty_fields_" + margin + "_";
         String path_post = ".pdf";
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 0; i <= 4; i++) {
             args[4] = path_pre + i + path_post;
             args[6] = "" + i;
             Application.main(args);
@@ -135,4 +136,29 @@ public class ApplicationCreateTest {
 
         Application.main(args);
     }
+
+    @Test
+    public void testAddTextAndBarcode() throws Exception {
+        String[] args = new String[9];
+        args[0] = "-addbarcode";
+        args[1] = "-src";
+        args[2] = "resources/hello.pdf";
+        args[3] = "-dest";
+        args[4] = "results/test/addbarcode/hello_barcode_text_right_side.pdf";
+        args[5] = "-code";
+        args[6] = "58c905fa477ca304d1123ce3";
+        args[7] = "-text";
+        args[8] = "Esto es un texto de prueba";
+
+        Application.main(args);
+    }
+
+    @Test
+    public void testHelp() throws Exception {
+        String[] args = new String[1];
+        args[0] = "-help";
+
+        Application.main(args);
+    }
+
 }

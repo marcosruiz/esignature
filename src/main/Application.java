@@ -3,16 +3,17 @@ package main;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.BadPdfFormatException;
 import com.itextpdf.text.pdf.Barcode;
 import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfAnnotation;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfFormField;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
@@ -25,7 +26,6 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 import exception.MarginNotFoundException;
 import exception.NoEmptySignaturesException;
 import exception.WrittingOutOfDinA4Exception;
-import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -89,6 +89,7 @@ public class Application {
         String dest = null;
         String pass = null;
         String code = null;
+        String text = null;
 
 
         for (int i = 0; i < args.length; i++) {
@@ -117,6 +118,9 @@ public class Application {
                         break;
                     case "-code":
                         code = args[i];
+                        break;
+                    case "-text":
+                        text = args[i];
                         break;
                     default:
                         break;
@@ -160,6 +164,9 @@ public class Application {
                     case "-code":
                         isSecondPair = true;
                         break;
+                    case "-text":
+                        isSecondPair = true;
+                        break;
                     case "-h":
                         s = new Scanner(new File("resources/help/help.txt"));
                         while (s.hasNext()) {
@@ -195,7 +202,8 @@ public class Application {
             signEmptyField(ks, PdfSignatureAppearance.NOT_CERTIFIED, src, dest, pass);
             System.out.println("Signature successful");
         } else if (addbarcode) {
-            addBarcode(src, dest, code);
+            addTextAndBarcode(src, dest, code, text);
+
         } else if (addimage) {
             addImage(src, dest, img);
         }
@@ -241,6 +249,10 @@ public class Application {
         ExternalSignature pks = new PrivateKeySignature(pk, "SHA-256", "BC");
         ExternalDigest digest = new BouncyCastleDigest();
         MakeSignature.signDetached(appearance, digest, pks, chain, null, null, null, 0, MakeSignature.CryptoStandard.CMS);
+
+        stamper.close();
+        os.close();
+        reader.close();
     }
 
 
@@ -268,7 +280,7 @@ public class Application {
         for (int i = 1; i <= qos; i++) {
             try {
                 // get position of signature
-                int[] coords = getCoordinates(margin, i);
+                float[] coords = getCoordinates(reader, margin, i);
                 // get name of field
                 String name = "sig" + i;
                 if (img == null) {
@@ -287,6 +299,7 @@ public class Application {
         }
         // close the stamper
         stamper.close();
+        reader.close();
     }
 
     /**
@@ -305,7 +318,7 @@ public class Application {
      * @throws DocumentException
      * @throws MarginNotFoundException
      */
-    public static void createEmptyFieldWithImage(PdfStamper stamper, String name, int x1, int y1, int x2, int y2, String margin, String img, int shift) throws BadPdfFormatException, IOException, DocumentException, MarginNotFoundException {
+    public static void createEmptyFieldWithImage(PdfStamper stamper, String name, float x1, float y1, float x2, float y2, String margin, String img, int shift) throws BadPdfFormatException, IOException, DocumentException, MarginNotFoundException {
 
         if (margin.equals("top") || margin.equals("bot")) {
             putImageSquare(stamper, x1 - shift, y1, img, 0, 20, 10);
@@ -319,7 +332,7 @@ public class Application {
     }
 
     /**
-     * Calculate the botom-left and top-right corners of <pos>th signature letting a gap for the image
+     * Calculate the bottom-left and top-right corners of <pos>th signature letting a gap for the image
      *
      * @param margin
      * @param pos
@@ -327,31 +340,41 @@ public class Application {
      * @throws exception.MarginNotFoundException
      * @throws exception.WrittingOutOfDinA4Exception
      */
-    public static int[] getCoordinates(String margin, int pos) throws MarginNotFoundException, WrittingOutOfDinA4Exception {
+    public static float[] getCoordinates(PdfReader reader, String margin, int pos) throws MarginNotFoundException, WrittingOutOfDinA4Exception {
         if (!(pos >= 1 && pos <= 4)) {
             throw new exception.WrittingOutOfDinA4Exception();
         }
-        int[] coords = new int[4];
+
+        Rectangle pagesize = reader.getPageSize(1);
+        float rightLimit = pagesize.getRight();
+        float topLimit = pagesize.getTop();
+        float spaceForImage = 50;
+        float spaceFromLimit1st = 10;
+        float spaceFromLimit2nd = 50;
+        float width = 100;
+        float spaceBeetweenSigs = 10;
+
+        float[] coords = new float[4];
         if (margin.equals("top")) {
-            coords[0] = (50 + ((pos - 1) * 100)) + 60 * pos;
-            coords[1] = 800;
-            coords[2] = (50 + (pos * 100)) + 60 * pos;
-            coords[3] = 840;
+            coords[0] = (spaceForImage + ((pos - 1) * width)) + (spaceForImage + spaceBeetweenSigs) * pos; //x bottom-left
+            coords[1] = topLimit - spaceForImage; //y bottom-letft
+            coords[2] = (spaceForImage + (pos * width)) + (spaceForImage + spaceBeetweenSigs) * pos; //x top-right
+            coords[3] = topLimit - spaceFromLimit1st; //y top-right
         } else if (margin.equals("bot")) {
-            coords[0] = (50 + ((pos - 1) * 100)) + 60 * pos;
-            coords[1] = 10;
-            coords[2] = (50 + (pos * 100)) + 60 * pos;
-            coords[3] = 50;
+            coords[0] = (spaceForImage + ((pos - 1) * width)) + (spaceForImage + spaceBeetweenSigs) * pos;
+            coords[1] = spaceFromLimit1st;
+            coords[2] = (spaceForImage + (pos * width)) + (spaceForImage + spaceBeetweenSigs) * pos;
+            coords[3] = spaceFromLimit2nd;
         } else if (margin.equals("left")) {
-            coords[0] = 10;
-            coords[1] = (50 + ((pos - 1) * 100)) + 60 * pos;
-            coords[2] = 50;
-            coords[3] = (50 + (pos * 100)) + 50 * pos;
+            coords[0] = spaceFromLimit1st;
+            coords[1] = (spaceForImage + ((pos - 1) * width)) + (spaceForImage + spaceBeetweenSigs) * pos;
+            coords[2] = spaceFromLimit2nd;
+            coords[3] = (spaceForImage + (pos * width)) + (spaceForImage + spaceBeetweenSigs) * pos;
         } else if (margin.equals("right")) {
-            coords[0] = 545;
-            coords[1] = (50 + ((pos - 1) * 100)) + 60 * pos;
-            coords[2] = 585;
-            coords[3] = (50 + (pos * 100)) + 60 * pos;
+            coords[0] = rightLimit - spaceFromLimit2nd;
+            coords[1] = (spaceForImage + ((pos - 1) * width)) + (spaceForImage + spaceBeetweenSigs) * pos;
+            coords[2] = rightLimit - spaceFromLimit1st;
+            coords[3] = (spaceForImage + (pos * width)) + (spaceForImage + spaceBeetweenSigs) * pos;
         } else if (margin.equals("end")) {
             //TODO
         } else {
@@ -361,16 +384,16 @@ public class Application {
     }
 
     /**
-     *
+     * Create an interactive empty rectangle to sign digitally
      *
      * @param stamper
      * @param name
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
+     * @param xblc : x bottom-left corner
+     * @param yblc : y bottom-left corner
+     * @param xrtc : x right-top corner
+     * @param yrtc : y right-top corner
      */
-    public static void createEmptyField(PdfStamper stamper, String name, int x1, int y1, int x2, int y2) {
+    public static void createEmptyField(PdfStamper stamper, String name, float xblc, float yblc, float xrtc, float yrtc) {
         if (stamper == null || name == null) {
             throw new java.lang.NullPointerException();
         }
@@ -378,7 +401,7 @@ public class Application {
         PdfFormField field = PdfFormField.createSignature(stamper.getWriter());
         field.setFieldName(name);
         // set the widget properties
-        field.setWidget(new Rectangle(x1, y1, x2, y2), PdfAnnotation.HIGHLIGHT_OUTLINE);
+        field.setWidget(new Rectangle(xblc, yblc, xrtc, yrtc), PdfAnnotation.HIGHLIGHT_OUTLINE);
         field.setFlags(PdfAnnotation.FLAGS_PRINT);
         // add the annotation
         stamper.addAnnotation(field, 1);
@@ -391,11 +414,13 @@ public class Application {
      * @param y coordinate x of upper-left corner of our image
      * @param img
      * @param rotation
+     * @param sizeSquare
+     * @param sizeMargin
      * @throws BadPdfFormatException
      * @throws IOException
      * @throws DocumentException
      */
-    public static void putImageSquare(PdfStamper stamper, int x, int y, String img, int rotation, int sizeSquare, int sizeMargin) throws BadPdfFormatException, IOException, DocumentException {
+    public static void putImageSquare(PdfStamper stamper, float x, float y, String img, int rotation, int sizeSquare, int sizeMargin) throws BadPdfFormatException, IOException, DocumentException {
         if (stamper == null || img == null) {
             throw new java.lang.NullPointerException();
         }
@@ -407,15 +432,15 @@ public class Application {
         over.addImage(image);
     }
 
-    public static void addBarcode(String src, String dest, String code) throws IOException, DocumentException {
-        PdfReader reader = new PdfReader(src);
-        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
-
+    public static void addBarcode(PdfReader reader, PdfStamper stamper, String code) throws DocumentException {
         PdfContentByte over = stamper.getOverContent(1);
+        String altText = "Cód. Validación: " + code + " | Página 1 de " + reader.getNumberOfPages();//TODO
 
         Barcode128 barcode = new Barcode128();
         barcode.setCodeType(Barcode.CODE128);
         barcode.setCode(code);
+        barcode.setAltText(altText);
+        barcode.setTextAlignment(Element.ALIGN_LEFT);
 
         Image image = barcode.createImageWithBarcode(over, BaseColor.BLACK, BaseColor.BLACK);
 
@@ -425,9 +450,32 @@ public class Application {
         PdfTemplate template
                 = barcode.createTemplateWithBarcode(over, BaseColor.BLACK, BaseColor.BLACK);
         putImage(stamper, image, x, y, 500, 40, 90);
+    }
+
+    public static void addTextAndBarcode(String src, String dest, String code, String text) throws IOException, DocumentException {
+        //Open
+        PdfReader reader = new PdfReader(src);
+        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+        //Put text
+        if (text != null) {
+            Rectangle pagesize = reader.getPageSize(1);
+            float x = pagesize.getRight() - 3;
+            float y = pagesize.getBottom() + 20;
+            PdfContentByte over = stamper.getOverContent(1);
+            over.setFontAndSize(BaseFont.createFont(), 8);
+            over.beginText();
+            over.showTextAligned(Element.ALIGN_LEFT, text, x, y, 90);
+            over.endText();
+        }
+        //Put barcode
+        addBarcode(reader, stamper, code);
         //Close
         stamper.close();
         reader.close();
+    }
+
+    public static void addText(PdfStamper stamper, String text, int rotation, float x, float y) {
+
     }
 
     public static void addImage(String src, String dest, String img) throws IOException, FileNotFoundException, DocumentException {
