@@ -10,9 +10,9 @@ import org.junit.Test;
  *
  * @author Marcos Ruiz Garcia [sobrenombre@gmail.com]
  */
-public class ApplicationSignTest {
+public class CLSignEmptySigns {
 
-    public ApplicationSignTest() {
+    public CLSignEmptySigns() {
     }
 
     @BeforeClass
@@ -55,7 +55,7 @@ public class ApplicationSignTest {
 
         for (int i = 1; i <= 4; i++) {
             args[4] = "results/test/sign/hello_" + margin + "_" + i + "_signed_of_4.pdf";
-            Application.main(args);
+            CLController.main(args);
             args[2] = args[4];
         }
     }
@@ -81,7 +81,7 @@ public class ApplicationSignTest {
 
         for (int i = 1; i <= 4; i++) {
             args[4] = "results/test/sign/hello_" + margin + "_" + i + "_signed_of_4_with_img.pdf";
-            Application.main(args);
+            CLController.main(args);
             args[2] = args[4];
         }
     }
@@ -103,7 +103,7 @@ public class ApplicationSignTest {
         args[7] = "-ks";
         args[8] = "resources/abc.p12";
 
-        Application.main(args);
+        CLController.main(args);
     }
 
 }

@@ -11,9 +11,9 @@ import org.junit.Test;
  *
  * @author Marcos Ruiz Garcia [sobrenombre@gmail.com]
  */
-public class ApplicationCreateTest {
+public class CLAddEmptyTest {
 
-    public ApplicationCreateTest() {
+    public CLAddEmptyTest() {
     }
 
     @BeforeClass
@@ -33,7 +33,7 @@ public class ApplicationCreateTest {
     }
 
     /**
-     * Test of main method, of class Application: Happy path
+     * Test of main method, of class AppController: Happy path
      */
     @Test
     public void testMainCreateEmptyField() throws Exception {
@@ -44,7 +44,7 @@ public class ApplicationCreateTest {
         args[2] = "resources/hello.pdf";
         args[3] = "-dest";
         args[4] = "results/test/create/hello_empty_fields_1.pdf";
-        Application.main(args);
+        CLController.main(args);
     }
 
 
@@ -71,7 +71,7 @@ public class ApplicationCreateTest {
         for (int i = 1; i <= 4; i++) {
             args[4] = path_pre + i + path_post;
             args[6] = "" + i;
-            Application.main(args);
+            CLController.main(args);
         }
     }
     @Test
@@ -98,7 +98,7 @@ public class ApplicationCreateTest {
         for (int i = 1; i <= 4; i++) {
             args[4] = path_pre + i + path_post;
             args[6] = "" + i;
-            Application.main(args);
+            CLController.main(args);
         }
     }
 
@@ -116,7 +116,7 @@ public class ApplicationCreateTest {
         args[5] = "-img";
         args[6] = "resources/cb.png";
 
-        Application.main(args);
+        CLController.main(args);
 
     }
 
@@ -134,7 +134,7 @@ public class ApplicationCreateTest {
         args[5] = "-code";
         args[6] = "58c905fa477ca304d1123ce3";
 
-        Application.main(args);
+        CLController.main(args);
     }
 
     @Test
@@ -150,7 +150,7 @@ public class ApplicationCreateTest {
         args[7] = "-text";
         args[8] = "Esto es un texto de prueba";
 
-        Application.main(args);
+        CLController.main(args);
     }
 
     @Test
@@ -158,7 +158,7 @@ public class ApplicationCreateTest {
         String[] args = new String[1];
         args[0] = "-help";
 
-        Application.main(args);
+        CLController.main(args);
     }
 
     ///////////////////
@@ -176,11 +176,11 @@ public class ApplicationCreateTest {
         args[6] = "2";
         args[7] = "-img";
         args[8] = "resources/icon6.png";
-        Application.main(args);
+        CLController.main(args);
 
         args[2] = "https://www.educa.jcyl.es/educacyl/cm/gallery/Recursos%20Infinity/tematicas/webquijote/pdf/DONQUIJOTE_PARTE1.pdf";
         args[4] = "results/test/http/hello_empty_2.pdf";
-        Application.main(args);
+        CLController.main(args);
     }
 
     @Test
@@ -196,7 +196,7 @@ public class ApplicationCreateTest {
         args[7] = "-img";
         args[8] = "C:\\Users\\Marcos\\Documents\\NetBeansProjects\\JavaApplication1\\resources\\icon.png";
 
-        Application.main(args);
+        CLController.main(args);
         System.out.println(args[8]);
 
     }

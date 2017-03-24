@@ -18,7 +18,9 @@ OPERATION
 OPTIONS
     to ALL operations
         -src
-            route of source pdf file <MANDATORY>
+            local route of source pdf file <MANDATORY: use this or -srcurl>
+        -srcurl
+            http route to a pdf file <MANDATORY: use this or -url>
         -dest
             route of generated pdf file <MANDATORY>
     to OPERATION -addemptysigns
@@ -41,7 +43,7 @@ OPTIONS
             route of an image to add
 
 EXAMPLES
-    java -jar esignature-cl.jar -addemptysigns ./hello_src.pdf -dest ./hello_dest.pdf -qos 3 -margin top -img ./icon.png
+    java -jar esignature-cl.jar -addemptysigns -src ./hello_src.pdf -dest ./hello_dest.pdf -qos 3 -margin top -img ./icon.png
     java -jar esignature-cl.java -sign -src ./hello_src.pdf -dest ./hello_dest.pdf -pass password -ks ./abc.p12
     java -jar esignature-cl.java -addbarcode -src ./hello_src.pdf -dest ./hello_dest.pdf -code thisisacode
     java -jar esignature-cl.java -addimage -src ./hello_src.pdf -dest ./hello_dest.pdf -img ./image.png
