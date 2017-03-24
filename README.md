@@ -42,11 +42,7 @@ Java 1.8
 
 //TODO
 
-## Autor
+## Autor and contact
 
-Marcos Ruiz García
-
-## Contact
-
-sobrenombre@gmail.com
+Marcos Ruiz García [sobrenombre@gmail.com]
 
