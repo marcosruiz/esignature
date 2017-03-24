@@ -86,4 +86,24 @@ public class ApplicationSignTest {
         }
     }
 
+    ///////////////////
+    // SRC FROM HTTP //
+    ///////////////////
+    @Test
+    public void testSignHttp() throws Exception {
+
+        String[] args = new String[9];
+        args[0] = "-sign";
+        args[1] = "-srcurl";
+        args[2] = "file:///C:/Users/Marcos/Documents/NetBeansProjects/JavaApplication1/results/test/http/hello_empty_2.pdf";
+        args[3] = "-dest";
+        args[4] = "results/test/http/hello_signed.pdf";
+        args[5] = "-pass";
+        args[6] = "password";
+        args[7] = "-ks";
+        args[8] = "resources/abc.p12";
+
+        Application.main(args);
+    }
+
 }

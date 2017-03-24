@@ -39,7 +39,7 @@ public class ApplicationCreateTest {
     public void testMainCreateEmptyField() throws Exception {
         System.out.printf(".");
         String[] args = new String[5];
-        args[0] = "-create";
+        args[0] = "-addemptysigns";
         args[1] = "-src";
         args[2] = "resources/hello.pdf";
         args[3] = "-dest";
@@ -58,7 +58,7 @@ public class ApplicationCreateTest {
 
     public void createSeveralEmptyFields(String margin) throws Exception {
         String[] args = new String[9];
-        args[0] = "-create";
+        args[0] = "-addemptysigns";
         args[1] = "-src";
         args[2] = "resources/hello.pdf";
         args[3] = "-dest";
@@ -68,7 +68,7 @@ public class ApplicationCreateTest {
 
         String path_pre = "results/test/create/hello_empty_fields_" + margin + "_";
         String path_post = ".pdf";
-        for (int i = 0; i <= 4; i++) {
+        for (int i = 1; i <= 4; i++) {
             args[4] = path_pre + i + path_post;
             args[6] = "" + i;
             Application.main(args);
@@ -83,7 +83,7 @@ public class ApplicationCreateTest {
     }
     public void createSeveralEmptyFieldsWithImg(String margin) throws Exception {
         String[] args = new String[11];
-        args[0] = "-create";
+        args[0] = "-addemptysigns";
         args[1] = "-src";
         args[2] = "resources/hello.pdf";
         args[3] = "-dest";
@@ -160,5 +160,46 @@ public class ApplicationCreateTest {
 
         Application.main(args);
     }
+
+    ///////////////////
+    // SRC FROM HTTP //
+    ///////////////////
+    @Test
+    public void testCreateFromHttp() throws Exception {
+        String[] args = new String[9];
+        args[0] = "-addemptysigns";
+        args[1] = "-srcurl";
+        args[2] = "http://eina.unizar.es/archivos/2016_2017/calendarios/Punto%202%20Calendarios%20y%20semanarios%20EINA%202016%202017.pdf";
+        args[3] = "-dest";
+        args[4] = "results/test/http/hello_empty.pdf";
+        args[5] = "-qos";
+        args[6] = "2";
+        args[7] = "-img";
+        args[8] = "resources/icon6.png";
+        Application.main(args);
+
+        args[2] = "https://www.educa.jcyl.es/educacyl/cm/gallery/Recursos%20Infinity/tematicas/webquijote/pdf/DONQUIJOTE_PARTE1.pdf";
+        args[4] = "results/test/http/hello_empty_2.pdf";
+        Application.main(args);
+    }
+
+    @Test
+    public void testCreateAbsolutePath() throws Exception {
+        String[] args = new String[9];
+        args[0] = "-addemptysigns";
+        args[1] = "-src";
+        args[2] = "C:\\Users\\Marcos\\Documents\\NetBeansProjects\\JavaApplication1\\resources\\hello.pdf";
+        args[3] = "-dest";
+        args[4] = "results/test/prueba.pdf";
+        args[5] = "-qos";
+        args[6] = "1";
+        args[7] = "-img";
+        args[8] = "C:\\Users\\Marcos\\Documents\\NetBeansProjects\\JavaApplication1\\resources\\icon.png";
+
+        Application.main(args);
+        System.out.println(args[8]);
+
+    }
+
 
 }

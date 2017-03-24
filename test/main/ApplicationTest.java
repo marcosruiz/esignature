@@ -1,5 +1,6 @@
 package main;
 
+import com.itextpdf.text.exceptions.InvalidPdfException;
 import com.itextpdf.text.pdf.PdfStamper;
 import exception.MarginNotFoundException;
 import exception.WrittingOutOfDinA4Exception;
@@ -39,14 +40,14 @@ public class ApplicationTest {
     /**
      * Test of signEmptyField method, of class Application.
      */
-    @Test(expected = FileNotFoundException.class)
+    @Test(expected = InvalidPdfException.class)
     public void testSignEmptyField() throws Exception {
         System.out.printf(".");
         String keystore = "";
         int level = 0;
         String src = "";
         String dest = "";
-        String pass = "";
+        char[] pass = null;
         Application.signEmptyField(keystore, level, src, dest, pass);
     }
 
@@ -54,7 +55,7 @@ public class ApplicationTest {
     /**
      * Test of createEmptyFields method, of class Application.
      */
-    @Test(expected = WrittingOutOfDinA4Exception.class)
+    @Test(expected = InvalidPdfException.class)
     public void testCreateEmptyFields() throws Exception {
         System.out.printf(".");
         String src = "";
@@ -90,7 +91,6 @@ public class ApplicationTest {
     public void testGetCoordinates() throws Exception {
         String margin = "";
         int i = 0;
-        float[] expResult = null;
         float[] result = Application.getCoordinates(null, margin, i);
         assertEquals(null, result);
     }

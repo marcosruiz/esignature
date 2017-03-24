@@ -13,6 +13,7 @@ import com.itextpdf.text.pdf.Barcode128;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfAnnotation;
 import com.itextpdf.text.pdf.PdfContentByte;
+import static com.itextpdf.text.pdf.PdfFileSpecification.url;
 import com.itextpdf.text.pdf.PdfFormField;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
@@ -31,6 +32,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -67,13 +72,7 @@ public class Application {
      * @throws exception.WrittingOutOfDinA4Exception
      * @throws exception.NoEmptySignaturesException
      */
-    public static void main(String[] args) throws IOException, DocumentException, NoSuchAlgorithmException, CertificateException, KeyStoreException, UnrecoverableKeyException, GeneralSecurityException, MarginNotFoundException, WrittingOutOfDinA4Exception, NoEmptySignaturesException {
-        //Print command line instrucction
-        /*System.out.print("java -jar esignature-cl.jar ");
-        for (String s : args) {
-            System.out.printf("%s ", s);
-        }
-        System.out.print("\n");*/
+    public static void main(String[] args) throws IOException, DocumentException, NoSuchAlgorithmException, CertificateException, KeyStoreException, UnrecoverableKeyException, GeneralSecurityException, MarginNotFoundException, WrittingOutOfDinA4Exception, NoEmptySignaturesException, URISyntaxException {
         Scanner s;
         boolean isSecondPair = false; // true if is a pair of arguments like "-qos 3"
         //Arguments
@@ -81,13 +80,14 @@ public class Application {
         boolean sign = false; // signEmptyField a gap of our pdf
         boolean addimage = false;
         boolean addbarcode = false;
+        boolean isSrcURL = false;
         String margin = "top"; // top, bot, left, right
         int qos = 1; //quantity of signatures: 1, 2, 3 or 4
         String img = null;
         String ks = null;
         String src = null;
         String dest = null;
-        String pass = null;
+        char[] pass = null;
         String code = null;
         String text = null;
 
@@ -114,13 +114,17 @@ public class Application {
                         dest = args[i];
                         break;
                     case "-pass":
-                        pass = args[i];
+                        pass = args[i].toCharArray();
                         break;
                     case "-code":
                         code = args[i];
                         break;
                     case "-text":
                         text = args[i];
+                        break;
+                    case "-srcurl":
+                        src = args[i];
+                        isSrcURL = true;
                         break;
                     default:
                         break;
@@ -155,6 +159,9 @@ public class Application {
                     case "-src":
                         isSecondPair = true;
                         break;
+                    case "-srcurl":
+                        isSecondPair = true;
+                        break;
                     case "-dest":
                         isSecondPair = true;
                         break;
@@ -167,40 +174,30 @@ public class Application {
                     case "-text":
                         isSecondPair = true;
                         break;
-                    case "-h":
-                        s = new Scanner(new File("resources/help/help.txt"));
-                        while (s.hasNext()) {
-                            System.out.println(s.nextLine());
-                        }
-                        s.close();
-                        break;
-                    case "-help":
-                        s = new Scanner(new File("resources/help/help.txt"));
-                        while (s.hasNext()) {
-                            System.out.println(s.nextLine());
-                        }
-                        s.close();
-                        break;
-                    case "help":
-                        s = new Scanner(new File("resources/help/help.txt"));
-                        while (s.hasNext()) {
-                            System.out.println(s.nextLine());
-                        }
-                        s.close();
-                        break;
                     default:
                         break;
                 }
             }
         }
         if (addemptysigns) {
-            createEmptyFields(src, dest, qos, margin, img);
+            if (isSrcURL) {
+                createEmptyFieldsFromUri(src, dest, qos, margin, img);
+            } else {
+                createEmptyFields(src, dest, qos, margin, img);
+            }
+
             System.out.println("Empty fields created");
         } else if (sign) {
+            //Provider
             BouncyCastleProvider provider = new BouncyCastleProvider();
             Security.addProvider(provider);
-            signEmptyField(ks, PdfSignatureAppearance.NOT_CERTIFIED, src, dest, pass);
-            System.out.println("Signature successful");
+
+            if (isSrcURL) {
+                signEmptyFieldFromUri(ks, PdfSignatureAppearance.NOT_CERTIFIED, src, dest, pass);
+            } else {
+                signEmptyField(ks, PdfSignatureAppearance.NOT_CERTIFIED, src, dest, pass);
+            }
+            System.out.println("Signature stamped successful");
         } else if (addbarcode) {
             addTextAndBarcode(src, dest, code, text);
 
@@ -208,32 +205,58 @@ public class Application {
             addImage(src, dest, img);
         }
     }
+    public static void signEmptyFieldFromUri(String keystore, String src, String dest, char[] pass)
+            throws Exception {
+        //Provider
+        BouncyCastleProvider provider = new BouncyCastleProvider();
+        Security.addProvider(provider);
+        signEmptyFieldFromUri(keystore, PdfSignatureAppearance.NOT_CERTIFIED, src, dest, pass);
+    }
+    public static void signEmptyFieldFromUri(String keystore, int level,
+            String src, String dest, char[] pass)
+            throws GeneralSecurityException, IOException, DocumentException, NoEmptySignaturesException, URISyntaxException {
+        // Creating the reader and the stamper
+        URL url = new URL(src);
+        PdfReader reader = new PdfReader(url.openStream());
+        FileOutputStream os = new FileOutputStream(dest);
+        PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
 
-    /**
-     * Create a new pdf file with a new esignature added
-     *
-     * @param keystore
-     * @param level
-     * @param src
-     * @param name
-     * @param dest
-     * @param pass
-     * @throws GeneralSecurityException
-     * @throws IOException
-     * @throws DocumentException
-     */
+        signEmptyField(keystore, level, reader, stamper, pass);
+
+        stamper.close();
+        os.close();
+        reader.close();
+    }
+    public static void signEmptyField(String keystore, String src, String dest, char[] pass) throws Exception {
+        //Provider
+        BouncyCastleProvider provider = new BouncyCastleProvider();
+        Security.addProvider(provider);
+        signEmptyField(keystore, PdfSignatureAppearance.NOT_CERTIFIED, src, dest, pass);
+    }
     public static void signEmptyField(String keystore, int level,
-            String src, String dest, String pass)
+            String src, String dest, char[] pass)
             throws GeneralSecurityException, IOException, DocumentException, NoEmptySignaturesException {
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        ks.load(new FileInputStream(keystore), pass.toCharArray());
-        String alias = (String) ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, pass.toCharArray());
-        Certificate[] chain = ks.getCertificateChain(alias);
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
         FileOutputStream os = new FileOutputStream(dest);
         PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
+
+        signEmptyField(keystore, level, reader, stamper, pass);
+
+        stamper.close();
+        os.close();
+        reader.close();
+    }
+
+    public static void signEmptyField(String keystore, int level,
+            PdfReader reader, PdfStamper stamper, char[] pass)
+            throws GeneralSecurityException, IOException, DocumentException, NoEmptySignaturesException {
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        ks.load(new FileInputStream(keystore), pass);
+        String alias = (String) ks.aliases().nextElement();
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, pass);
+        Certificate[] chain = ks.getCertificateChain(alias);
+
         //Searching blank signature names
         AcroFields fields = reader.getAcroFields();
         ArrayList<String> sigNames = fields.getSignatureNames();
@@ -249,33 +272,25 @@ public class Application {
         ExternalSignature pks = new PrivateKeySignature(pk, "SHA-256", "BC");
         ExternalDigest digest = new BouncyCastleDigest();
         MakeSignature.signDetached(appearance, digest, pks, chain, null, null, null, 0, MakeSignature.CryptoStandard.CMS);
+    }
 
+    public static void createEmptyFieldsFromUri(String src, String dest, int qos, String margin, String img) throws MalformedURLException, IOException, DocumentException, WrittingOutOfDinA4Exception {
+        URL url = new URL(src);
+        PdfReader reader = new PdfReader(url);
+        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+
+        if (!(src == null || dest == null)) {
+            createEmptyFields(reader, stamper, qos, margin, img);
+        }
         stamper.close();
-        os.close();
         reader.close();
     }
 
+    private static void createEmptyFields(PdfReader reader, PdfStamper stamper, int qos, String margin, String img) throws WrittingOutOfDinA4Exception {
 
-    /**
-     *
-     * @param src
-     * @param dest
-     * @param qos
-     * @param margin
-     * @param img
-     * @throws IOException
-     * @throws DocumentException
-     * @throws WrittingOutOfDinA4Exception
-     */
-    public static void createEmptyFields(String src, String dest, int qos, String margin, String img) throws WrittingOutOfDinA4Exception, IOException, DocumentException {
-        if (src == null || dest == null) {
-            throw new NullPointerException();
+        if (qos < 1) {
+            qos = 1;
         }
-        if (!(qos >= 1)) {
-            throw new WrittingOutOfDinA4Exception();
-        }
-        PdfReader reader = new PdfReader(src);
-        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
 
         for (int i = 1; i <= qos; i++) {
             try {
@@ -297,27 +312,20 @@ public class Application {
             }
 
         }
+
+    }
+
+    public static void createEmptyFields(String src, String dest, int qos, String margin, String img) throws WrittingOutOfDinA4Exception, IOException, DocumentException {
+
+        PdfReader reader = new PdfReader(src);
+        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+
+        createEmptyFields(reader, stamper, qos, margin, img);
         // close the stamper
         stamper.close();
         reader.close();
     }
 
-    /**
-     *
-     * @param stamper
-     * @param name
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @param margin
-     * @param img
-     * @param shift
-     * @throws BadPdfFormatException
-     * @throws IOException
-     * @throws DocumentException
-     * @throws MarginNotFoundException
-     */
     public static void createEmptyFieldWithImage(PdfStamper stamper, String name, float x1, float y1, float x2, float y2, String margin, String img, int shift) throws BadPdfFormatException, IOException, DocumentException, MarginNotFoundException {
 
         if (margin.equals("top") || margin.equals("bot")) {
@@ -507,4 +515,5 @@ public class Application {
         PdfContentByte over = stamper.getOverContent(1);
         over.addImage(image);
     }
+
 }
