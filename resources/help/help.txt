@@ -41,7 +41,7 @@ OPTIONS
             route of an image to add
 
 EXAMPLES
-    java -jar esignature-cl.jar -addemptysigns ./hello_src.pdf -dest ./hello_dest.pdf -qos 3 -margin top -img ./icon.png
+    java -jar esignature-cl.jar -addemptysigns -src ./hello_src.pdf -dest ./hello_dest.pdf -qos 3 -margin top -img ./icon.png
     java -jar esignature-cl.java -sign -src ./hello_src.pdf -dest ./hello_dest.pdf -pass password -ks ./abc.p12
     java -jar esignature-cl.java -addbarcode -src ./hello_src.pdf -dest ./hello_dest.pdf -code thisisacode
     java -jar esignature-cl.java -addimage -src ./hello_src.pdf -dest ./hello_dest.pdf -img ./image.png
