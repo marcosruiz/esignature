@@ -436,9 +436,9 @@ public class NewJApplet extends javax.swing.JApplet {
             int qos = (Integer) jSpinner1.getValue();
             try {
                 if (jRadioButton1.isSelected()) {
-                    AppController.createEmptyFields(path_pdf, path_res, qos, margin, path_img);
+                    AppController.addEmptyFields(path_pdf, path_res, qos, margin, path_img);
                 } else {
-                    AppController.createEmptyFieldsFromUri(jTextField1.getText(), path_res, qos, margin, path_img);
+                    AppController.addEmptyFieldsFromUri(jTextField1.getText(), path_res, qos, margin, path_img);
                 }
                 jLabel9.setText(SUCCESS);
             } catch (Exception ex) {

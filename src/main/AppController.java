@@ -23,9 +23,7 @@ import com.itextpdf.text.pdf.security.ExternalDigest;
 import com.itextpdf.text.pdf.security.ExternalSignature;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
-import exception.MarginNotFoundException;
 import exception.NoEmptySignaturesException;
-import exception.WrittingOutOfDinA4Exception;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -71,7 +69,7 @@ public class AppController {
             }
         }
 
-        public static Margin valueOF(String s) {
+        public static Margin parseMargin(String s) {
             s = s.toLowerCase();
             Margin ret = null;
             if (s.equals(TOP.toString())) {
@@ -199,15 +197,14 @@ public class AppController {
      * @throws MalformedURLException
      * @throws IOException
      * @throws DocumentException
-     * @throws WrittingOutOfDinA4Exception
      */
-    public static void createEmptyFieldsFromUri(String src, String dest, int qos, Margin margin, String img) throws MalformedURLException, IOException, DocumentException, WrittingOutOfDinA4Exception {
+    public static void addEmptyFieldsFromUri(String src, String dest, int qos, Margin margin, String img) throws MalformedURLException, IOException, DocumentException {
         URL url = new URL(src);
         PdfReader reader = new PdfReader(url);
         PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
 
         if (!(src == null || dest == null)) {
-            createEmptyFields(reader, stamper, qos, margin, img);
+            addEmptyFields(reader, stamper, qos, margin, img);
         }
         stamper.close();
         reader.close();
@@ -219,31 +216,22 @@ public class AppController {
      * @param qos
      * @param margin
      * @param img
-     * @throws WrittingOutOfDinA4Exception
      */
-    private static void createEmptyFields(PdfReader reader, PdfStamper stamper, int qos, Margin margin, String img) throws WrittingOutOfDinA4Exception {
+    private static void addEmptyFields(PdfReader reader, PdfStamper stamper, int qos, Margin margin, String img) throws IOException, DocumentException {
 
         if (qos < 1) {
             qos = 1;
         }
 
         for (int i = 1; i <= qos; i++) {
-            try {
-                // get position of signature
-                float[] coords = getCoordinates(reader, margin, i);
-                // get name of field
-                String name = "sig" + i;
-                if (img == null) {
-                    createEmptyField(stamper, name, coords[0], coords[1], coords[2], coords[3]);
-                } else {
-                    try {
-                        createEmptyFieldWithImage(stamper, name, coords[0], coords[1], coords[2], coords[3], margin, img, 50);
-                    } catch (IOException | DocumentException ex) {
-                        Logger.getLogger(AppController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            } catch (MarginNotFoundException ex) {
-                Logger.getLogger(AppController.class.getName()).log(Level.SEVERE, null, ex);
+            // get position of signature
+            float[] coords = calcCoords(reader, margin, i);
+            // get name of field
+            String name = "sig" + i;
+            if (img == null) {
+                addEmptyField(stamper, name, coords[0], coords[1], coords[2], coords[3]);
+            } else {
+                addEmptyFieldWithImage(stamper, name, coords[0], coords[1], coords[2], coords[3], margin, img, 50);
             }
 
         }
@@ -257,16 +245,15 @@ public class AppController {
      * @param qos
      * @param margin
      * @param img
-     * @throws WrittingOutOfDinA4Exception
      * @throws IOException
      * @throws DocumentException
      */
-    public static void createEmptyFields(String src, String dest, int qos, Margin margin, String img) throws WrittingOutOfDinA4Exception, IOException, DocumentException {
+    public static void addEmptyFields(String src, String dest, int qos, Margin margin, String img) throws IOException, DocumentException {
 
         PdfReader reader = new PdfReader(src);
         PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
 
-        createEmptyFields(reader, stamper, qos, margin, img);
+        addEmptyFields(reader, stamper, qos, margin, img);
         // close the stamper
         stamper.close();
         reader.close();
@@ -283,12 +270,8 @@ public class AppController {
      * @param margin
      * @param img
      * @param shift
-     * @throws BadPdfFormatException
-     * @throws IOException
-     * @throws DocumentException
-     * @throws MarginNotFoundException
      */
-    public static void createEmptyFieldWithImage(PdfStamper stamper, String name, float x1, float y1, float x2, float y2, Margin margin, String img, int shift) throws BadPdfFormatException, IOException, DocumentException, MarginNotFoundException {
+    public static void addEmptyFieldWithImage(PdfStamper stamper, String name, float x1, float y1, float x2, float y2, Margin margin, String img, int shift) throws IOException, DocumentException {
 
         if (null == margin) {
             throw new NullPointerException();
@@ -304,9 +287,9 @@ public class AppController {
                     break;
                 default:
                     throw new IllegalArgumentException();
-            }
+                }
 
-        createEmptyField(stamper, name, x1, y1, x2, y2);
+        addEmptyField(stamper, name, x1, y1, x2, y2);
     }
 
     /**
@@ -316,13 +299,8 @@ public class AppController {
      * @param margin
      * @param pos
      * @return table of 4 ints wich correspond to x,y bottom left corner and x,y top right corners of a rectangle
-     * @throws exception.MarginNotFoundException
-     * @throws exception.WrittingOutOfDinA4Exception
      */
-    public static float[] getCoordinates(PdfReader reader, Margin margin, int pos) throws MarginNotFoundException, WrittingOutOfDinA4Exception {
-        if (!(pos >= 1 && pos <= 4)) {
-            throw new exception.WrittingOutOfDinA4Exception();
-        }
+    public static float[] calcCoords(PdfReader reader, Margin margin, int pos) {
 
         Rectangle pagesize = reader.getPageSize(1);
         float rightLimit = pagesize.getRight();
@@ -335,7 +313,7 @@ public class AppController {
 
         float[] coords = new float[4];
         if (null == margin) {
-            throw new NullPointerException("Margin not found");
+            throw new NullPointerException();
         } else
             switch (margin) {
                 case TOP:
@@ -378,7 +356,7 @@ public class AppController {
      * @param xrtc : x right-top corner
      * @param yrtc : y right-top corner
      */
-    public static void createEmptyField(PdfStamper stamper, String name, float xblc, float yblc, float xrtc, float yrtc) {
+    public static void addEmptyField(PdfStamper stamper, String name, float xblc, float yblc, float xrtc, float yrtc) throws NullPointerException {
         if (stamper == null || name == null) {
             throw new java.lang.NullPointerException();
         }

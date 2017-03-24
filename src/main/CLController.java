@@ -1,21 +1,14 @@
 package main;
 
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfSignatureAppearance;
-import exception.MarginNotFoundException;
 import exception.NoEmptySignaturesException;
-import exception.WrittingOutOfDinA4Exception;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Security;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import main.AppController.Margin;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * This class is in charge of all interaction with the user by command line
@@ -28,18 +21,13 @@ public class CLController {
      * Read the arguments of the program and addemptysigns empty signatures or signEmptyField empty signatures
      *
      * @param args
-     * @throws java.io.IOException
-     * @throws com.itextpdf.text.DocumentException
-     * @throws java.security.NoSuchAlgorithmException
-     * @throws java.security.cert.CertificateException
-     * @throws java.security.KeyStoreException
-     * @throws java.security.UnrecoverableKeyException
-     * @throws exception.MarginNotFoundException
-     * @throws exception.WrittingOutOfDinA4Exception
-     * @throws exception.NoEmptySignaturesException
-     * @throws java.net.URISyntaxException
      */
-    public static void main(String[] args) throws IOException, DocumentException, NoSuchAlgorithmException, CertificateException, KeyStoreException, UnrecoverableKeyException, GeneralSecurityException, MarginNotFoundException, WrittingOutOfDinA4Exception, NoEmptySignaturesException, URISyntaxException {
+    public static void main(String[] args) throws Exception {
+        for (String str : args) {
+            System.out.print(str + " ");
+        }
+        System.out.println();
+        ///////////////////////////
         Scanner s;
         boolean isSecondPair = false; // true if is a pair of arguments like "-qos 3"
         //Arguments
@@ -48,7 +36,7 @@ public class CLController {
         boolean addimage = false;
         boolean addbarcode = false;
         boolean isSrcURL = false;
-        Margin margin = Margin.TOP; // top, bot, left, right
+        Margin margin = Margin.TOP;
         int qos = 1; //quantity of signatures: 1, 2, 3 or 4
         String img = null;
         String ks = null;
@@ -58,7 +46,7 @@ public class CLController {
         String code = null;
         String text = null;
 
-
+        // Read user input
         for (int i = 0; i < args.length; i++) {
             if (isSecondPair) {
                 switch (args[i - 1]) {
@@ -66,20 +54,7 @@ public class CLController {
                         qos = Integer.parseInt(args[i]);
                         break;
                     case "-margin":
-                        switch (args[i].toLowerCase()) {
-                            case "top":
-                                margin = Margin.TOP;
-                                break;
-                            case "bot":
-                                margin = Margin.BOT;
-                                break;
-                            case "right":
-                                margin = Margin.RIGHT;
-                                break;
-                            case "left":
-                                margin = Margin.LEFT;
-                                break;
-                        }
+                        margin = Margin.parseMargin(args[i]);
                     case "-img":
                         img = args[i];
                         break;
@@ -100,10 +75,6 @@ public class CLController {
                         break;
                     case "-text":
                         text = args[i];
-                        break;
-                    case "-srcurl":
-                        src = args[i];
-                        isSrcURL = true;
                         break;
                     default:
                         break;
@@ -138,8 +109,8 @@ public class CLController {
                     case "-src":
                         isSecondPair = true;
                         break;
-                    case "-srcurl":
-                        isSecondPair = true;
+                    case "-url":
+                        isSrcURL = true;
                         break;
                     case "-dest":
                         isSecondPair = true;
@@ -158,13 +129,13 @@ public class CLController {
                 }
             }
         }
+        //Execute the corret method of AppController
         if (addemptysigns) {
             if (isSrcURL) {
-                AppController.createEmptyFieldsFromUri(src, dest, qos, margin, img);
+                AppController.addEmptyFieldsFromUri(src, dest, qos, margin, img);
             } else {
-                AppController.createEmptyFields(src, dest, qos, margin, img);
+                AppController.addEmptyFields(src, dest, qos, margin, img);
             }
-
             System.out.println("Empty fields created");
         } else if (sign) {
             if (isSrcURL) {
@@ -179,5 +150,6 @@ public class CLController {
         } else if (addimage) {
             AppController.addImage(src, dest, img);
         }
+
     }
 }

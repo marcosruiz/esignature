@@ -4,8 +4,6 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.exceptions.InvalidPdfException;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
-import exception.MarginNotFoundException;
-import exception.WrittingOutOfDinA4Exception;
 import main.AppController.Margin;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -55,7 +53,7 @@ public class AppControllerTest {
 
 
     /**
-     * Test of createEmptyFields method, of class AppController.
+     * Test of addEmptyFields method, of class AppController.
      */
     @Test(expected = InvalidPdfException.class)
     public void testCreateEmptyFields() throws Exception {
@@ -65,13 +63,13 @@ public class AppControllerTest {
         int qos = 0;
         Margin margin = null;;
         String img = "";
-        AppController.createEmptyFields(src, dest, qos, margin, img);
+        AppController.addEmptyFields(src, dest, qos, margin, img);
     }
 
     /**
-     * Test of createEmptyFieldWithImage method, of class AppController.
+     * Test of addEmptyFieldWithImage method, of class AppController.
      */
-    @Test(expected = MarginNotFoundException.class)
+    @Test(expected = Exception.class)
     public void testAddFieldWithImage() throws Exception {
         System.out.printf(".");
         PdfStamper stamper = null;
@@ -83,22 +81,22 @@ public class AppControllerTest {
         Margin margin = null;;
         String img = "";
         int shift = 0;
-        AppController.createEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
+        AppController.addEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
     }
 
     /**
-     * Test of getCoordinates method, of class AppController.
+     * Test of calcCoords method, of class AppController.
      */
-    @Test(expected = WrittingOutOfDinA4Exception.class)
+    @Test(expected = Exception.class)
     public void testGetCoordinates() throws Exception {
         Margin margin = null;;
         int i = 0;
-        float[] result = AppController.getCoordinates(null, margin, i);
+        float[] result = AppController.calcCoords(null, margin, i);
         assertEquals(null, result);
     }
 
     /**
-     * Test of createEmptyField method, of class AppController.
+     * Test of addEmptyField method, of class AppController.
      */
     @Test(expected = NullPointerException.class)
     public void testCreateEmptyField() {
@@ -109,7 +107,7 @@ public class AppControllerTest {
         int y1 = 0;
         int x2 = 0;
         int y2 = 0;
-        AppController.createEmptyField(stamper, name, x1, y1, x2, y2);
+        AppController.addEmptyField(stamper, name, x1, y1, x2, y2);
 
     }
 
@@ -208,7 +206,7 @@ public class AppControllerTest {
     }
 
     /**
-     * Test of createEmptyFieldsFromUri method, of class AppController.
+     * Test of addEmptyFieldsFromUri method, of class AppController.
      */
     @Test
     public void testCreateEmptyFieldsFromUri() throws Exception {
@@ -218,13 +216,13 @@ public class AppControllerTest {
         int qos = 0;
         AppController.Margin margin = null;
         String img = "";
-        AppController.createEmptyFieldsFromUri(src, dest, qos, margin, img);
+        AppController.addEmptyFieldsFromUri(src, dest, qos, margin, img);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of createEmptyFieldWithImage method, of class AppController.
+     * Test of addEmptyFieldWithImage method, of class AppController.
      */
     @Test
     public void testCreateEmptyFieldWithImage() throws Exception {
@@ -238,7 +236,7 @@ public class AppControllerTest {
         Margin margin = null;;
         String img = "";
         int shift = 0;
-        AppController.createEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
+        AppController.addEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -264,7 +262,7 @@ public class AppControllerTest {
     /**
      * Test of addBarcode method, of class AppController.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testAddBarcode() throws Exception {
         System.out.println("addBarcode");
         PdfReader reader = null;

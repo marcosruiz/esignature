@@ -1,6 +1,5 @@
 package main;
 
-import java.io.IOException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,9 +50,9 @@ public class CLAddEmptyTest {
     @Test
     public void testMainCreateSeveralEmptyFields() throws Exception {
         createSeveralEmptyFields("top");
-        createSeveralEmptyFields("bot");
-        createSeveralEmptyFields("right");
-        createSeveralEmptyFields("left");
+        //createSeveralEmptyFields("bot");
+        //createSeveralEmptyFields("right");
+        //createSeveralEmptyFields("left");
     }
 
     public void createSeveralEmptyFields(String margin) throws Exception {
@@ -93,11 +92,13 @@ public class CLAddEmptyTest {
         args[9] = "-img";
         args[10] = "resources/icon6.png";
 
+
         String path_pre = "results/test/create/hello_empty_fields_with_img_" + margin + "_";
         String path_post = ".pdf";
         for (int i = 1; i <= 4; i++) {
             args[4] = path_pre + i + path_post;
             args[6] = "" + i;
+
             CLController.main(args);
         }
     }
@@ -166,9 +167,9 @@ public class CLAddEmptyTest {
     ///////////////////
     @Test
     public void testCreateFromHttp() throws Exception {
-        String[] args = new String[9];
+        String[] args = new String[10];
         args[0] = "-addemptysigns";
-        args[1] = "-srcurl";
+        args[1] = "-src";
         args[2] = "http://eina.unizar.es/archivos/2016_2017/calendarios/Punto%202%20Calendarios%20y%20semanarios%20EINA%202016%202017.pdf";
         args[3] = "-dest";
         args[4] = "results/test/http/hello_empty.pdf";
@@ -176,6 +177,7 @@ public class CLAddEmptyTest {
         args[6] = "2";
         args[7] = "-img";
         args[8] = "resources/icon6.png";
+        args[9] = "-url";
         CLController.main(args);
 
         args[2] = "https://www.educa.jcyl.es/educacyl/cm/gallery/Recursos%20Infinity/tematicas/webquijote/pdf/DONQUIJOTE_PARTE1.pdf";

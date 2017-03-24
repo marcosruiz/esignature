@@ -6,21 +6,19 @@ SYNOPSIS
     java -jar esignature-cl.jar <OPERATION> [OPTIONS...]
 
 OPERATION
-    -addemptysigns
+    addemptysigns
         create empty signatures
-    -sign
+    sign
         sign empty signatures
-    -addbarcode
+    addbarcode
         add a barcode to the left-bottom corner margin
-    -addimage
+    addimage
         add a image to the left-bottom corner margin
 
 OPTIONS
     to ALL operations
         -src
-            local route of source pdf file <MANDATORY: use this or -srcurl>
-        -srcurl
-            http route to a pdf file <MANDATORY: use this or -url>
+            local route of source pdf file <MANDATORY>
         -dest
             route of generated pdf file <MANDATORY>
     to OPERATION -addemptysigns
@@ -30,11 +28,15 @@ OPTIONS
             margin where our empty signatures be placed [top|bot|left|right]
         -img
             route of an image to add to our empty signatures
+        -url
+            to indicate OPTION -src is a URL
     to OPERATION -sign
         -ks
             keystore (.jks or .p12) <MANDATORY>
         -pass
             password of our keystore <MANDATORY>
+        -url
+            to indicate OPTION -src is a URL
     to OPERATION -addbarcode
        -code
             code used to generate the barcode <MANDATORY>
