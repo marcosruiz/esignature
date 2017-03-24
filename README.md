@@ -1,4 +1,4 @@
-# esignature-cl
+# E-signature
 
 Command line and Applet program to sign pdfs and more on the fly
 
