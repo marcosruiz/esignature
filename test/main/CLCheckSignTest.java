@@ -25,9 +25,9 @@ import org.junit.Test;
  *
  * @author Marcos Ruiz Garcia [sobrenombre@gmail.com]
  */
-public class AppCheckTest {
+public class CLCheckSignTest {
 
-    public AppCheckTest() {
+    public CLCheckSignTest() {
     }
 
     @BeforeClass

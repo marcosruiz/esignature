@@ -23,11 +23,6 @@ public class CLController {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        for (String str : args) {
-            System.out.print(str + " ");
-        }
-        System.out.println();
-        ///////////////////////////
         Scanner s;
         boolean isSecondPair = false; // true if is a pair of arguments like "-qos 3"
         //Arguments
@@ -55,6 +50,7 @@ public class CLController {
                         break;
                     case "-margin":
                         margin = Margin.parseMargin(args[i]);
+                        break;
                     case "-img":
                         img = args[i];
                         break;

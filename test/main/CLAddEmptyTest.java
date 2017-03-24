@@ -50,9 +50,9 @@ public class CLAddEmptyTest {
     @Test
     public void testMainCreateSeveralEmptyFields() throws Exception {
         createSeveralEmptyFields("top");
-        //createSeveralEmptyFields("bot");
-        //createSeveralEmptyFields("right");
-        //createSeveralEmptyFields("left");
+        createSeveralEmptyFields("bot");
+        createSeveralEmptyFields("right");
+        createSeveralEmptyFields("left");
     }
 
     public void createSeveralEmptyFields(String margin) throws Exception {
