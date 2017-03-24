@@ -40,9 +40,7 @@ Java 1.8
 
 ## Link to download
 
-<https://github.com/marcosruiz/esignature/blob/master/dist>
-
-**Important!** You need to dowload *esignature-cl.jar* and the folder *lib*.
+//TODO
 
 ## Autor
 
