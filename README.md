@@ -1,6 +1,6 @@
 # esignature-cl
 
-Command line program to sign pdfs on the fly
+Command line and Applet program to sign pdfs and more on the fly
 
 ## Libraries
 
@@ -23,6 +23,12 @@ In fact, you only need the following .jar as project's libraries:
 This program use the following libraries:
 
 - junit
+
+To run test successfully you should execute in the following order:
+
+1. CLAddEmptyTest.java
+2. CLSignEmptyTest.java
+3. CLCheckSignTest.java
 
 ## Use
 
