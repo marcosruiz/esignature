@@ -1,5 +1,7 @@
 package main;
 
+import java.io.File;
+import static main.CLMainTest.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,6 +19,33 @@ public class CLAddEmptyTest {
 
     @BeforeClass
     public static void setUpClass() {
+        File f;
+
+        f = new File(PATH_RESULTS);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        f = new File(PATH_ADD_EMPTY);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        f = new File(PATH_ADD_SIGNATURE);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        f = new File(PATH_ADD_BC);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        f = new File(PATH_HTTP);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        f = new File(PATH_ADD_IMG);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+
     }
 
     @AfterClass
@@ -40,9 +69,9 @@ public class CLAddEmptyTest {
         String[] args = new String[5];
         args[0] = "-addemptysigns";
         args[1] = "-src";
-        args[2] = "resources/hello.pdf";
+        args[2] = PATH_PDF + "hello.pdf";
         args[3] = "-dest";
-        args[4] = "results/test/create/hello_empty_fields_1.pdf";
+        args[4] = PATH_ADD_EMPTY + "hello_empty_fields_1.pdf";
         CLController.main(args);
     }
 
@@ -59,13 +88,13 @@ public class CLAddEmptyTest {
         String[] args = new String[9];
         args[0] = "-addemptysigns";
         args[1] = "-src";
-        args[2] = "resources/hello.pdf";
+        args[2] = PATH_PDF + "hello.pdf";
         args[3] = "-dest";
         args[5] = "-qos";
         args[7] = "-margin";
         args[8] = margin;
 
-        String path_pre = "results/test/create/hello_empty_fields_" + margin + "_";
+        String path_pre = PATH_ADD_EMPTY + "hello_empty_fields_" + margin + "_";
         String path_post = ".pdf";
         for (int i = 1; i <= 4; i++) {
             args[4] = path_pre + i + path_post;
@@ -84,16 +113,16 @@ public class CLAddEmptyTest {
         String[] args = new String[11];
         args[0] = "-addemptysigns";
         args[1] = "-src";
-        args[2] = "resources/hello.pdf";
+        args[2] = PATH_PDF + "hello.pdf";
         args[3] = "-dest";
         args[5] = "-qos";
         args[7] = "-margin";
         args[8] = margin;
         args[9] = "-img";
-        args[10] = "resources/icon6.png";
+        args[10] = PATH_ICONS + "icon6.png";
 
 
-        String path_pre = "results/test/create/hello_empty_fields_with_img_" + margin + "_";
+        String path_pre = PATH_ADD_EMPTY + "hello_empty_fields_with_img_" + margin + "_";
         String path_post = ".pdf";
         for (int i = 1; i <= 4; i++) {
             args[4] = path_pre + i + path_post;
@@ -111,11 +140,11 @@ public class CLAddEmptyTest {
         String[] args = new String[7];
         args[0] = "-addimage";
         args[1] = "-src";
-        args[2] = "resources/hello.pdf";
+        args[2] = PATH_PDF + "hello.pdf";
         args[3] = "-dest";
-        args[4] = "results/test/addimage/hello_image_right_side.pdf";
+        args[4] = PATH_ADD_IMG + "hello_image_right_side.pdf";
         args[5] = "-img";
-        args[6] = "resources/cb.png";
+        args[6] = PATH_RESOURCES + "cb.png";
 
         CLController.main(args);
 
@@ -129,9 +158,9 @@ public class CLAddEmptyTest {
         String[] args = new String[7];
         args[0] = "-addbarcode";
         args[1] = "-src";
-        args[2] = "resources/hello.pdf";
+        args[2] = PATH_PDF + "hello.pdf";
         args[3] = "-dest";
-        args[4] = "results/test/addbarcode/hello_barcode_right_side.pdf";
+        args[4] = PATH_ADD_BC + "hello_barcode_right_side.pdf";
         args[5] = "-code";
         args[6] = "58c905fa477ca304d1123ce3";
 
@@ -143,9 +172,9 @@ public class CLAddEmptyTest {
         String[] args = new String[9];
         args[0] = "-addbarcode";
         args[1] = "-src";
-        args[2] = "resources/hello.pdf";
+        args[2] = PATH_PDF + "hello.pdf";
         args[3] = "-dest";
-        args[4] = "results/test/addbarcode/hello_barcode_text_right_side.pdf";
+        args[4] = PATH_ADD_BC + "hello_barcode_text_right_side.pdf";
         args[5] = "-code";
         args[6] = "58c905fa477ca304d1123ce3";
         args[7] = "-text";
@@ -172,11 +201,11 @@ public class CLAddEmptyTest {
         args[1] = "-src";
         args[2] = "http://eina.unizar.es/archivos/2016_2017/calendarios/Punto%202%20Calendarios%20y%20semanarios%20EINA%202016%202017.pdf";
         args[3] = "-dest";
-        args[4] = "results/test/http/hello_empty.pdf";
+        args[4] = PATH_HTTP + "hello_empty.pdf";
         args[5] = "-qos";
         args[6] = "2";
         args[7] = "-img";
-        args[8] = "resources/icon6.png";
+        args[8] = PATH_ICONS + "icon6.png";
         args[9] = "-url";
         CLController.main(args);
 
@@ -190,13 +219,13 @@ public class CLAddEmptyTest {
         String[] args = new String[9];
         args[0] = "-addemptysigns";
         args[1] = "-src";
-        args[2] = "C:\\Users\\Marcos\\Documents\\NetBeansProjects\\JavaApplication1\\resources\\hello.pdf";
+        args[2] = PATH_APP + PATH_PDF + "hello.pdf";
         args[3] = "-dest";
-        args[4] = "results/test/prueba.pdf";
+        args[4] = PATH_ADD_EMPTY + "hello_empty_fields_from_abs_path.pdf";
         args[5] = "-qos";
         args[6] = "1";
         args[7] = "-img";
-        args[8] = "C:\\Users\\Marcos\\Documents\\NetBeansProjects\\JavaApplication1\\resources\\icon.png";
+        args[8] = PATH_APP + PATH_ICONS + "icon.png";
 
         CLController.main(args);
         System.out.println(args[8]);

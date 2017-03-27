@@ -8,7 +8,7 @@ import java.security.GeneralSecurityException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import main.AppController.Margin;
+import main.AppModel.Margin;
 
 /**
  * This class is in charge of all interaction with the user by command line
@@ -125,26 +125,26 @@ public class CLController {
                 }
             }
         }
-        //Execute the corret method of AppController
+        //Execute the corret method of AppModel
         if (addemptysigns) {
             if (isSrcURL) {
-                AppController.addEmptyFieldsFromUri(src, dest, qos, margin, img);
+                AppModel.addEmptyFieldsFromUri(src, dest, qos, margin, img);
             } else {
-                AppController.addEmptyFields(src, dest, qos, margin, img);
+                AppModel.addEmptyFields(src, dest, qos, margin, img);
             }
             System.out.println("Empty fields created");
         } else if (sign) {
             if (isSrcURL) {
-                AppController.signEmptyFieldFromUri(ks, src, dest, pass);
+                AppModel.signEmptyFieldFromUri(ks, src, dest, pass);
             } else {
-                AppController.signEmptyField(ks, src, dest, pass);
+                AppModel.signEmptyField(ks, src, dest, pass);
             }
             System.out.println("Signature stamped successful");
         } else if (addbarcode) {
-            AppController.addTextAndBarcode(src, dest, code, text);
+            AppModel.addTextAndBarcode(src, dest, code, text);
 
         } else if (addimage) {
-            AppController.addImage(src, dest, img);
+            AppModel.addImage(src, dest, img);
         }
 
     }

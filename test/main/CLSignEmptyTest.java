@@ -1,6 +1,7 @@
 package main;
 
 import org.junit.After;
+import static main.CLMainTest.*;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -46,15 +47,15 @@ public class CLSignEmptyTest {
         String[] args = new String[9];
         args[0] = "-sign";
         args[1] = "-src";
-        args[2] = "results/test/create/hello_empty_fields_" + margin + "_4.pdf";
+        args[2] = PATH_ADD_EMPTY + "hello_empty_fields_" + margin + "_4.pdf";
         args[3] = "-dest";
         args[5] = "-pass";
         args[6] = "password";
         args[7] = "-ks";
-        args[8] = "resources/abc.p12";
+        args[8] = PATH_CERT + "/abc.p12";
 
         for (int i = 1; i <= 4; i++) {
-            args[4] = "results/test/sign/hello_" + margin + "_" + i + "_signed_of_4.pdf";
+            args[4] = PATH_ADD_SIGNATURE + "hello_" + margin + "_" + i + "_signed_of_4.pdf";
             CLController.main(args);
             args[2] = args[4];
         }
@@ -72,15 +73,15 @@ public class CLSignEmptyTest {
         String[] args = new String[9];
         args[0] = "-sign";
         args[1] = "-src";
-        args[2] = "results/test/create/hello_empty_fields_with_img_" + margin + "_4.pdf";
+        args[2] = PATH_ADD_EMPTY + "hello_empty_fields_with_img_" + margin + "_4.pdf";
         args[3] = "-dest";
         args[5] = "-pass";
         args[6] = "password";
         args[7] = "-ks";
-        args[8] = "resources/abc.p12";
+        args[8] = PATH_CERT + "abc.p12";
 
         for (int i = 1; i <= 4; i++) {
-            args[4] = "results/test/sign/hello_" + margin + "_" + i + "_signed_of_4_with_img.pdf";
+            args[4] = PATH_ADD_SIGNATURE + "hello_" + margin + "_" + i + "_signed_of_4_with_img.pdf";
             CLController.main(args);
             args[2] = args[4];
         }
@@ -95,13 +96,13 @@ public class CLSignEmptyTest {
         String[] args = new String[10];
         args[0] = "-sign";
         args[1] = "-src";
-        args[2] = "file:///C:/Users/Marcos/Documents/NetBeansProjects/JavaApplication1/results/test/http/hello_empty_2.pdf";
+        args[2] = PATH_SRC_HTTP + "hello_empty_2.pdf";
         args[3] = "-dest";
-        args[4] = "results/test/http/hello_signed.pdf";
+        args[4] = PATH_HTTP + "hello_signed.pdf";
         args[5] = "-pass";
         args[6] = "password";
         args[7] = "-ks";
-        args[8] = "resources/abc.p12";
+        args[8] = PATH_CERT + "abc.p12";
         args[9] = "-url";
 
         CLController.main(args);

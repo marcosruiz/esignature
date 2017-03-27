@@ -47,7 +47,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  *
  * @author Marcos Ruiz Garcia [sobrenombre@gmail.com]
  */
-public class AppController {
+public class AppModel {
 
     public enum Margin {
         TOP, BOT, LEFT, RIGHT;

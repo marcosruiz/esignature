@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static main.CLMainTest.*;
 
 /**
  *
@@ -32,6 +33,8 @@ public class CLCheckSignTest {
 
     @BeforeClass
     public static void setUpClass() {
+
+
     }
 
     @AfterClass
@@ -67,7 +70,7 @@ public class CLCheckSignTest {
     public void testSignaturesInfoWithImg(String margin) throws IOException, GeneralSecurityException {
         BouncyCastleProvider provider = new BouncyCastleProvider();
         Security.addProvider(provider);
-        String path_pre = "results/test/sign/hello_" + margin + "_";
+        String path_pre = PATH_ADD_SIGNATURE + "hello_" + margin + "_";
         String path_post = "_signed_of_4_with_img.pdf";
         String path;
         for (int i = 1; i <= 4; i++) {
@@ -80,7 +83,7 @@ public class CLCheckSignTest {
     public void testSignaturesInfo(String margin) throws IOException, GeneralSecurityException {
         BouncyCastleProvider provider = new BouncyCastleProvider();
         Security.addProvider(provider);
-        String path_pre = "results/test/sign/hello_" + margin + "_";
+        String path_pre = PATH_ADD_SIGNATURE + "hello_" + margin + "_";
         String path_post = "_signed_of_4.pdf";
         String path;
         for (int i = 1; i <= 4; i++) {
@@ -131,7 +134,7 @@ public class CLCheckSignTest {
 
     @Test
     public void testSignaturesIntegrity() throws IOException, GeneralSecurityException {
-        String path = "results/test/sign/hello_right_4_signed_of_4.pdf";
+        String path = PATH_ADD_SIGNATURE + "hello_right_4_signed_of_4.pdf";
 
         BouncyCastleProvider provider = new BouncyCastleProvider();
         Security.addProvider(provider);

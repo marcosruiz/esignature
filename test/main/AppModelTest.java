@@ -4,7 +4,9 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.exceptions.InvalidPdfException;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
-import main.AppController.Margin;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import main.AppModel.Margin;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -16,13 +18,14 @@ import org.junit.Test;
  *
  * @author Marcos Ruiz Garcia [sobrenombre@gmail.com]
  */
-public class AppControllerTest {
+public class AppModelTest {
 
-    public AppControllerTest() {
+    public AppModelTest() {
     }
 
     @BeforeClass
     public static void setUpClass() {
+
     }
 
     @AfterClass
@@ -38,7 +41,7 @@ public class AppControllerTest {
     }
 
     /**
-     * Test of signEmptyField method, of class AppController.
+     * Test of signEmptyField method, of class AppModel.
      */
     @Test(expected = InvalidPdfException.class)
     public void testSignEmptyField() throws Exception {
@@ -48,12 +51,12 @@ public class AppControllerTest {
         String src = "";
         String dest = "";
         char[] pass = null;
-        AppController.signEmptyField(keystore, src, dest, pass);
+        AppModel.signEmptyField(keystore, src, dest, pass);
     }
 
 
     /**
-     * Test of addEmptyFields method, of class AppController.
+     * Test of addEmptyFields method, of class AppModel.
      */
     @Test(expected = InvalidPdfException.class)
     public void testCreateEmptyFields() throws Exception {
@@ -63,11 +66,11 @@ public class AppControllerTest {
         int qos = 0;
         Margin margin = null;;
         String img = "";
-        AppController.addEmptyFields(src, dest, qos, margin, img);
+        AppModel.addEmptyFields(src, dest, qos, margin, img);
     }
 
     /**
-     * Test of addEmptyFieldWithImage method, of class AppController.
+     * Test of addEmptyFieldWithImage method, of class AppModel.
      */
     @Test(expected = Exception.class)
     public void testAddFieldWithImage() throws Exception {
@@ -81,22 +84,22 @@ public class AppControllerTest {
         Margin margin = null;;
         String img = "";
         int shift = 0;
-        AppController.addEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
+        AppModel.addEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
     }
 
     /**
-     * Test of calcCoords method, of class AppController.
+     * Test of calcCoords method, of class AppModel.
      */
     @Test(expected = Exception.class)
     public void testGetCoordinates() throws Exception {
         Margin margin = null;;
         int i = 0;
-        float[] result = AppController.calcCoords(null, margin, i);
+        float[] result = AppModel.calcCoords(null, margin, i);
         assertEquals(null, result);
     }
 
     /**
-     * Test of addEmptyField method, of class AppController.
+     * Test of addEmptyField method, of class AppModel.
      */
     @Test(expected = NullPointerException.class)
     public void testCreateEmptyField() {
@@ -107,12 +110,12 @@ public class AppControllerTest {
         int y1 = 0;
         int x2 = 0;
         int y2 = 0;
-        AppController.addEmptyField(stamper, name, x1, y1, x2, y2);
+        AppModel.addEmptyField(stamper, name, x1, y1, x2, y2);
 
     }
 
     /**
-     * Test of putImageSquare method, of class AppController.
+     * Test of putImageSquare method, of class AppModel.
      */
     @Test(expected = NullPointerException.class)
     public void testPutImage() throws Exception {
@@ -124,28 +127,27 @@ public class AppControllerTest {
         int rotation = 0;
         int sideSquare = 0;
         int sizeMargin = 0;
-        AppController.putImageSquare(stamper, x1, y1, route, rotation, sideSquare, sizeMargin);
+        AppModel.putImageSquare(stamper, x1, y1, route, rotation, sideSquare, sizeMargin);
     }
 
     /**
-     * Test of signEmptyFieldFromUri method, of class AppController.
+     * Test of signEmptyFieldFromUri method, of class AppModel.
      */
-    @Test
+    @Test(expected = MalformedURLException.class)
     public void testSignEmptyFieldFromUri_4args() throws Exception {
         System.out.println("signEmptyFieldFromUri");
         String keystore = "";
         String src = "";
         String dest = "";
         char[] pass = null;
-        AppController.signEmptyFieldFromUri(keystore, src, dest, pass);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.signEmptyFieldFromUri(keystore, src, dest, pass);
+
     }
 
     /**
-     * Test of signEmptyFieldFromUri method, of class AppController.
+     * Test of signEmptyFieldFromUri method, of class AppModel.
      */
-    @Test
+    @Test(expected = MalformedURLException.class)
     public void testSignEmptyFieldFromUri_5args() throws Exception {
         System.out.println("signEmptyFieldFromUri");
         String keystore = "";
@@ -153,30 +155,28 @@ public class AppControllerTest {
         String src = "";
         String dest = "";
         char[] pass = null;
-        AppController.signEmptyFieldFromUri(keystore, src, dest, pass);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.signEmptyFieldFromUri(keystore, src, dest, pass);
     }
 
     /**
-     * Test of signEmptyField method, of class AppController.
+     * Test of signEmptyField method, of class AppModel.
      */
-    @Test
+    @Test(expected = InvalidPdfException.class)
     public void testSignEmptyField_4args() throws Exception {
         System.out.println("signEmptyField");
         String keystore = "";
         String src = "";
         String dest = "";
         char[] pass = null;
-        AppController.signEmptyField(keystore, src, dest, pass);
+        AppModel.signEmptyField(keystore, src, dest, pass);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of signEmptyField method, of class AppController.
+     * Test of signEmptyField method, of class AppModel.
      */
-    @Test
+    @Test(expected = InvalidPdfException.class)
     public void testSignEmptyField_5args_1() throws Exception {
         System.out.println("signEmptyField");
         String keystore = "";
@@ -184,15 +184,13 @@ public class AppControllerTest {
         String src = "";
         String dest = "";
         char[] pass = null;
-        AppController.signEmptyField(keystore, src, dest, pass);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.signEmptyField(keystore, src, dest, pass);
     }
 
     /**
-     * Test of signEmptyField method, of class AppController.
+     * Test of signEmptyField method, of class AppModel.
      */
-    @Test
+    @Test(expected = FileNotFoundException.class)
     public void testSignEmptyField_5args_2() throws Exception {
         System.out.println("signEmptyField");
         String keystore = "";
@@ -200,31 +198,29 @@ public class AppControllerTest {
         PdfReader reader = null;
         PdfStamper stamper = null;
         char[] pass = null;
-        AppController.signEmptyField(keystore, level, reader, stamper, pass);
+        AppModel.signEmptyField(keystore, level, reader, stamper, pass);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of addEmptyFieldsFromUri method, of class AppController.
+     * Test of addEmptyFieldsFromUri method, of class AppModel.
      */
-    @Test
+    @Test(expected = MalformedURLException.class)
     public void testCreateEmptyFieldsFromUri() throws Exception {
         System.out.println("createEmptyFieldsFromUri");
         String src = "";
         String dest = "";
         int qos = 0;
-        AppController.Margin margin = null;
+        AppModel.Margin margin = null;
         String img = "";
-        AppController.addEmptyFieldsFromUri(src, dest, qos, margin, img);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.addEmptyFieldsFromUri(src, dest, qos, margin, img);
     }
 
     /**
-     * Test of addEmptyFieldWithImage method, of class AppController.
+     * Test of addEmptyFieldWithImage method, of class AppModel.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testCreateEmptyFieldWithImage() throws Exception {
         System.out.println("createEmptyFieldWithImage");
         PdfStamper stamper = null;
@@ -236,15 +232,14 @@ public class AppControllerTest {
         Margin margin = null;;
         String img = "";
         int shift = 0;
-        AppController.addEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.addEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
+
     }
 
     /**
-     * Test of putImageSquare method, of class AppController.
+     * Test of putImageSquare method, of class AppModel.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testPutImageSquare() throws Exception {
         System.out.println("putImageSquare");
         PdfStamper stamper = null;
@@ -254,13 +249,11 @@ public class AppControllerTest {
         int rotation = 0;
         int sizeSquare = 0;
         int sizeMargin = 0;
-        AppController.putImageSquare(stamper, x, y, img, rotation, sizeSquare, sizeMargin);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.putImageSquare(stamper, x, y, img, rotation, sizeSquare, sizeMargin);
     }
 
     /**
-     * Test of addBarcode method, of class AppController.
+     * Test of addBarcode method, of class AppModel.
      */
     @Test(expected = NullPointerException.class)
     public void testAddBarcode() throws Exception {
@@ -268,28 +261,26 @@ public class AppControllerTest {
         PdfReader reader = null;
         PdfStamper stamper = null;
         String code = "";
-        AppController.addBarcode(reader, stamper, code);
+        AppModel.addBarcode(reader, stamper, code);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of addTextAndBarcode method, of class AppController.
+     * Test of addTextAndBarcode method, of class AppModel.
      */
-    @Test
+    @Test(expected = InvalidPdfException.class)
     public void testAddTextAndBarcode() throws Exception {
         System.out.println("addTextAndBarcode");
         String src = "";
         String dest = "";
         String code = "";
         String text = "";
-        AppController.addTextAndBarcode(src, dest, code, text);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.addTextAndBarcode(src, dest, code, text);
     }
 
     /**
-     * Test of addText method, of class AppController.
+     * Test of addText method, of class AppModel.
      */
     @Test
     public void testAddText() {
@@ -299,29 +290,27 @@ public class AppControllerTest {
         int rotation = 0;
         float x = 0.0F;
         float y = 0.0F;
-        AppController.addText(stamper, text, rotation, x, y);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.addText(stamper, text, rotation, x, y);
     }
 
     /**
-     * Test of addImage method, of class AppController.
+     * Test of addImage method, of class AppModel.
      */
-    @Test
+    @Test(expected = InvalidPdfException.class)
     public void testAddImage() throws Exception {
         System.out.println("addImage");
         String src = "";
         String dest = "";
         String img = "";
-        AppController.addImage(src, dest, img);
+        AppModel.addImage(src, dest, img);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of putImage method, of class AppController.
+     * Test of putImage method, of class AppModel.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testPutImage_7args_1() throws Exception {
         System.out.println("putImage");
         PdfStamper stamper = null;
@@ -331,15 +320,14 @@ public class AppControllerTest {
         int lenX = 0;
         int lenY = 0;
         int rotation = 0;
-        AppController.putImage(stamper, img, posX, posY, lenX, lenY, rotation);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AppModel.putImage(stamper, img, posX, posY, lenX, lenY, rotation);
+
     }
 
     /**
-     * Test of putImage method, of class AppController.
+     * Test of putImage method, of class AppModel.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testPutImage_7args_2() throws Exception {
         System.out.println("putImage");
         PdfStamper stamper = null;
@@ -349,10 +337,115 @@ public class AppControllerTest {
         int lenX = 0;
         int lenY = 0;
         int rotation = 0;
-        AppController.putImage(stamper, image, posX, posY, lenX, lenY, rotation);
+        AppModel.putImage(stamper, image, posX, posY, lenX, lenY, rotation);
+    }
+
+    /**
+     * Test of signEmptyFieldFromUri method, of class AppModel.
+     */
+    @Test(expected = MalformedURLException.class)
+    public void testSignEmptyFieldFromUri() throws Exception {
+        System.out.println("signEmptyFieldFromUri");
+        String keystore = "";
+        String src = "";
+        String dest = "";
+        char[] pass = null;
+        AppModel.signEmptyFieldFromUri(keystore, src, dest, pass);
+    }
+
+    /**
+     * Test of signEmptyField method, of class AppModel.
+     */
+    @Test(expected = FileNotFoundException.class)
+    public void testSignEmptyField_5args() throws Exception {
+        System.out.println("signEmptyField");
+        String keystore = "";
+        int level = 0;
+        PdfReader reader = null;
+        PdfStamper stamper = null;
+        char[] pass = null;
+        AppModel.signEmptyField(keystore, level, reader, stamper, pass);
+
+    }
+
+    /**
+     * Test of addEmptyFieldsFromUri method, of class AppModel.
+     */
+    @Test(expected = MalformedURLException.class)
+    public void testAddEmptyFieldsFromUri() throws Exception {
+        System.out.println("addEmptyFieldsFromUri");
+        String src = "";
+        String dest = "";
+        int qos = 0;
+        Margin margin = null;
+        String img = "";
+        AppModel.addEmptyFieldsFromUri(src, dest, qos, margin, img);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
+    /**
+     * Test of addEmptyFields method, of class AppModel.
+     */
+    @Test(expected = InvalidPdfException.class)
+    public void testAddEmptyFields() throws Exception {
+        System.out.println("addEmptyFields");
+        String src = "";
+        String dest = "";
+        int qos = 0;
+        Margin margin = null;
+        String img = "";
+        AppModel.addEmptyFields(src, dest, qos, margin, img);
+
+    }
+
+    /**
+     * Test of addEmptyFieldWithImage method, of class AppModel.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testAddEmptyFieldWithImage() throws Exception {
+        System.out.println("addEmptyFieldWithImage");
+        PdfStamper stamper = null;
+        String name = "";
+        float x1 = 0.0F;
+        float y1 = 0.0F;
+        float x2 = 0.0F;
+        float y2 = 0.0F;
+        Margin margin = null;
+        String img = "";
+        int shift = 0;
+        AppModel.addEmptyFieldWithImage(stamper, name, x1, y1, x2, y2, margin, img, shift);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of calcCoords method, of class AppModel.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testCalcCoords() {
+        System.out.println("calcCoords");
+        PdfReader reader = null;
+        Margin margin = null;
+        int pos = 0;
+        float[] expResult = null;
+        float[] result = AppModel.calcCoords(reader, margin, pos);
+        //assertArrayEquals(expResult, result);
+    }
+
+    /**
+     * Test of addEmptyField method, of class AppModel.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testAddEmptyField() {
+        System.out.println("addEmptyField");
+        PdfStamper stamper = null;
+        String name = "";
+        float xblc = 0.0F;
+        float yblc = 0.0F;
+        float xrtc = 0.0F;
+        float yrtc = 0.0F;
+        AppModel.addEmptyField(stamper, name, xblc, yblc, xrtc, yrtc);
+    }
 
 }

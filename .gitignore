@@ -7,6 +7,7 @@
 *.war
 *.ear
 build/
+results/
 
 # Netbeans folder
 nbproyeject/
@@ -20,3 +21,4 @@ nbproyeject/
 *.key
 *.crt
 *ks
+/dist/

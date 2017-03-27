@@ -2,13 +2,13 @@ package main;
 
 import java.io.File;
 import javax.swing.JFileChooser;
-import main.AppController.Margin;
+import main.AppModel.Margin;
 
 /**
  *
  * @author ITERNOVA [http://www.iternova.net]
  */
-public class NewJApplet extends javax.swing.JApplet {
+public class GUIView extends javax.swing.JApplet {
 
     String path_img = null;
     String path_pdf = null;
@@ -16,10 +16,10 @@ public class NewJApplet extends javax.swing.JApplet {
     int qos = 1;
     final String SUCCESS = "Done! Pdf generated!";
     final String FAILURE = "Something went wrong! :(";
-    public NewJApplet() {
+    public GUIView() {
     }
     /**
-     * Initializes the applet NewJApplet
+     * Initializes the applet GUIView
      */
     @Override
     public void init() {
@@ -36,14 +36,17 @@ public class NewJApplet extends javax.swing.JApplet {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewJApplet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUIView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewJApplet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUIView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewJApplet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUIView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewJApplet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUIView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the applet */
@@ -348,7 +351,7 @@ public class NewJApplet extends javax.swing.JApplet {
         // TODO add your handling code here:
         //Handle open button action.
         if (evt.getSource() == jButton1) {
-            int returnVal = jFileChooser1.showOpenDialog(NewJApplet.this);
+            int returnVal = jFileChooser1.showOpenDialog(GUIView.this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jFileChooser1.getSelectedFile();
@@ -378,7 +381,7 @@ public class NewJApplet extends javax.swing.JApplet {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         char[] pass = jPasswordField1.getPassword();
         jFileChooser1.setSelectedFile(new File("signed.pdf"));
-        int returnVal = jFileChooser1.showSaveDialog(NewJApplet.this);
+        int returnVal = jFileChooser1.showSaveDialog(GUIView.this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = jFileChooser1.getSelectedFile();
@@ -386,9 +389,9 @@ public class NewJApplet extends javax.swing.JApplet {
 
             try {
                 if (jRadioButton1.isSelected()) {
-                    AppController.signEmptyField(path_ks, path_pdf, path_res, pass);
+                    AppModel.signEmptyField(path_ks, path_pdf, path_res, pass);
                 } else {
-                    AppController.signEmptyFieldFromUri(path_ks, jTextField1.getText(), path_res, pass);
+                    AppModel.signEmptyFieldFromUri(path_ks, jTextField1.getText(), path_res, pass);
                 }
                 jLabel9.setText(SUCCESS);
             } catch (Exception ex) {
@@ -410,7 +413,7 @@ public class NewJApplet extends javax.swing.JApplet {
      */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         if (evt.getSource() == jButton4) {
-            int returnVal = jFileChooser1.showOpenDialog(NewJApplet.this);
+            int returnVal = jFileChooser1.showOpenDialog(GUIView.this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jFileChooser1.getSelectedFile();
                 path_ks = file.getAbsolutePath();
@@ -426,7 +429,7 @@ public class NewJApplet extends javax.swing.JApplet {
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         jFileChooser1.setSelectedFile(new File("out.pdf"));
-        int returnVal = jFileChooser1.showSaveDialog(NewJApplet.this);
+        int returnVal = jFileChooser1.showSaveDialog(GUIView.this);
 
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -436,9 +439,9 @@ public class NewJApplet extends javax.swing.JApplet {
             int qos = (Integer) jSpinner1.getValue();
             try {
                 if (jRadioButton1.isSelected()) {
-                    AppController.addEmptyFields(path_pdf, path_res, qos, margin, path_img);
+                    AppModel.addEmptyFields(path_pdf, path_res, qos, margin, path_img);
                 } else {
-                    AppController.addEmptyFieldsFromUri(jTextField1.getText(), path_res, qos, margin, path_img);
+                    AppModel.addEmptyFieldsFromUri(jTextField1.getText(), path_res, qos, margin, path_img);
                 }
                 jLabel9.setText(SUCCESS);
             } catch (Exception ex) {
@@ -461,7 +464,7 @@ public class NewJApplet extends javax.swing.JApplet {
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         if (evt.getSource() == jButton3) {
-            int returnVal = jFileChooser1.showOpenDialog(NewJApplet.this);
+            int returnVal = jFileChooser1.showOpenDialog(GUIView.this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jFileChooser1.getSelectedFile();
                 path_img = file.getAbsolutePath();
