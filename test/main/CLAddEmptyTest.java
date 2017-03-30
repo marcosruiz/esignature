@@ -210,7 +210,7 @@ public class CLAddEmptyTest {
         CLController.main(args);
 
         args[2] = "https://www.educa.jcyl.es/educacyl/cm/gallery/Recursos%20Infinity/tematicas/webquijote/pdf/DONQUIJOTE_PARTE1.pdf";
-        args[4] = "results/test/http/hello_empty_2.pdf";
+        args[4] = PATH_HTTP + "hello_empty_2.pdf";
         CLController.main(args);
     }
 

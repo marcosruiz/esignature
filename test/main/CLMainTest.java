@@ -19,7 +19,7 @@ public class CLMainTest {
     public static String PATH_ADD_BC = PATH_RESULTS + "addbarcode/";
     public static String PATH_HTTP = PATH_RESULTS + "http/";
     public static String PATH_ADD_IMG = PATH_RESULTS + "addimage/";
-    public static String PATH_SRC_HTTP = "file:///C:/Users/Marcos/Documents/NetBeansProjects/JavaApplication1/results/test/http/";
+    public static String PATH_SRC_HTTP = "file:///C:/Users/Marcos/Documents/NetBeansProjects/JavaApplication1/" + PATH_HTTP;
 
     @Test
     public void testApp() throws Exception {
